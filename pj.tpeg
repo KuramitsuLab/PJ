@@ -1,0 +1,263 @@
+// Programmable Japanese
+
+Statement =
+  { Expression+ #Statement }
+
+/* Characters */
+
+TEN = [、，,\n]
+KANJI = [㐀-䶵一-龠々〇〻ーご]
+KATA = [ァ-ヶー・]
+HIRA = [ぁ-ん]
+_ = [ \t]*
+
+/* Expression */
+
+Expression = 
+  / Argument FuncApp
+  / Verbal
+  / Noun
+  / { .* #Unknown }
+
+Argument = 
+  / ArgumentGrouping
+  / { Noun Suffix #Argument }
+
+CastExpression = {^ Noun #Cast } NounSuffix?
+
+NounSuffix = 
+  / {^ OfSuffix NounSuffix #Of }
+  / {^ Suffix #NSuffix } FuncApp?
+
+Suffix = { SUFFIX #Suffix }
+
+FuncApp = {^ Argument* Verbal #FuncApp } CastExpression?
+
+"{{" = '{{' / '＜'
+"}}" = '}}' / '＞'
+
+ArgumentGrouping = { 
+    "{{" Expression "}}"
+    #Argument 
+}
+
+// 連体詞
+
+Verbal = 
+  / Verb / Adjective
+  / AdjectiveAnd {^ Expression #And }
+  / VerbAnd {^ Expression #And }
+
+//名詞
+
+Noun = CompositeNoun　_ConnectedNoun*
+
+_ConnectedNoun = 
+  {^ OfSuffix CompositeNoun #ConnectedNoun　　}
+
+OfSuffix = { OFSUFFIX #Of }
+
+CompositeNoun = 
+  / "{{" Noun "}}"
+  / { Modifier CompositeNoun #ModifiedNoun　} 
+  / PrimaryNoun 
+
+Modifier =
+  / { ADJVERB #Adjective }
+  / { VERBNOUN #Verba }
+
+PrimaryNoun = 
+  / Primary
+  / { DICTNOUN #Noun }  // 辞書
+  / "『" {  ("』" .)* "』" #Noun }
+  / {VERBPREFIX VERBPREFIX? NOUN? #Noun } // 学び直し
+  / { (!VERBPREFIX NOUNCHAR)+ VERBPREFIX NOUN? #Noun } // 上書き モード
+  / { NOUN #Noun }
+
+NOUN = NOUNCHAR+
+NOUNCHAR = (KANJI / KATA) // パターン：　漢字とカタカナは名詞
+
+Primary =
+  / _ { [A-Za-z_] [A-Za-z0-9_]* #Identifier } _
+  / _ { [0-9]+ #Int } _
+
+/* 辞書的な定義 */
+
+DICTNOUN =
+  / 'の' / 'ため' / 'とき' 
+
+OFSUFFIX =
+  / 'の'　/ 'からの'　/ 'への'
+
+SUFFIX =
+  / 'は' / 'が' / 'を'
+  / 'に' / 'で'
+  / TEN
+
+VERBDICT =
+  / '見た'
+  / '泳ぐ'
+  / '美しい'
+
+/* 形容詞パターン */
+
+Adverb = { ADJPREFIX #Adverb }
+
+Adjective =
+  / { Adverb Adjective #QualifiedAdjective }
+  / { ADJVERB #Adjective }
+
+AdjectiveAnd =
+  / { Adverb AdjectiveAnd #QualifiedAdjective }
+  / { ADJAND #Adjective }
+
+ADJPREFIX = 
+  'とても' / 'あまり'
+
+ASTEM = 
+  / 'よ'
+  / (KANJI / KATA)+
+
+ADJVERB = 
+  ASTEM (_ADJVERB / HIRA _ADJVERB / HIRA HIRA _ADJVERB)
+
+_ADJVERB = // サ変の連体詞
+  / ('し' / 'っぽ' / 'ぼった' / 'っこ' / 'た') "い"
+  / 'な' "い"?  // 正確な
+  / "い"
+
+"い" = 'い' / 'くない' / 'そうな'
+
+ADJAND = 
+  ASTEM (_ADJAND / HIRA _ADJAND / HIRA HIRA _ADJAND)
+
+_ADJAND = // 形容詞の連用
+  / ('し' / 'っぽ' / 'ぼった' / 'っこ' / 'た') "く"
+  / 'な' "く"  // 正確な
+  / "く"
+
+"く" = ('くなく' / 'く') 
+
+/* 動詞パターン */
+
+Verb =
+  / { AdjectiveAnd Verb #QualifiedVerb }
+  / { VERB #Verb }
+
+VerbAnd =
+  / { AdjectiveAnd VerbAnd #QualifiedVerb }
+  / { VERBAND #Verb }
+
+STEM = /* サ変の語幹 */
+  (KANJI / KATA)+
+
+STEM5 = /* 五段活用の語幹 */
+  (KANJI / KATA)
+
+STEM1 = /* 一段活用の語幹 */
+  / [鋳診観視見経簸着看獲煮流歴恐得干居射寝割似出ゐれみへひねにでてせきえうい]
+  / KANJI [いえきけしせちてみめりれにねぎげじぜびべ]
+
+// 動詞PREFIX ＋　（寄り道） 学び直し
+VERBPREFIX = 
+  / STEM5 [きしちにりいみぎび]
+  / KANJI [いえきけしせちてみめりれにねぎげじぜびべ]
+
+// 連体詞
+
+VERBNOUN = 
+  / STEM _VERBNOUN
+  / VERBPREFIX? STEM5 (_VERB5NOUN / _VERB1NOUN)
+  / VERBPREFIX? STEM1 _VERB1NOUN
+
+_VERBNOUN = // サ変の連体詞
+  / 'し' VNAI / 'し' VTA / 'する'
+
+_VERB5NOUN =  // ５段の連体詞
+  / 'か' VNAI / 'い' VTA / 'く' 
+  / 'さ' VNAI / 'し' VTA / 'す' 
+  / 'た'　VNAI　/ 'っ' VTA / 'つ' 
+  / 'な'　VNAI　/ 'ん' VDA / 'ぬ' 
+  / 'ら' VNAI　/ 'っ' VTA / 'る' 
+  / 'わ' VNAI　/ 'っ' VTA / 'う' 
+  / 'ま' VNAI　/ 'ん' VDA / 'む' 
+  / 'が' VNAI　/ 'い' VDA / 'ぐ' 
+  / 'ば' VNAI　/ 'ん' VDA / 'ぶ' 
+
+_VERB1NOUN =  // 上一段の連体詞
+  / VNAI / VTA / 'る' 
+
+VNAI = 
+  / 'ない'  
+  / 'なかった'
+
+VTA = 'た'  
+VDA = 'だ'  
+
+// 動詞
+
+VERB = 
+  / STEM _VERB
+  / VERBPREFIX STEM5 (_VERB5 / _VERB1)
+  / STEM5 (_VERB5 / _VERB1)
+  / VERBPREFIX STEM1 _VERB1
+  / STEM1 _VERB1
+
+_VERB = // サ変動詞
+  / 'し' VNAI / 'し' VMASU　/ 'し' VTA / 'する' / 'しろ' / 'しよう'
+
+_VERB5 =
+  / 'か' VNAI / 'き' VMASU / 'い' VTA / 'く' / 'け' "！" / 'こう'
+  / 'さ' VNAI / 'し' VMASU / 'し' VTA / 'す' / 'せ' "！" / 'そう'
+  / 'た'　VNAI　/ 'ち' VMASU / 'っ' VTA / 'つ' / 'て' "！" / 'とう'
+  / 'な'　VNAI　/ 'に' VMASU / 'ん' VDA / 'ぬ' / 'ね' "！" / 'のう'
+  / 'ら' VNAI　/ 'り' VMASU　/ 'っ' VTA / 'る' / 'れ' "！" / 'ろう'
+  / 'わ' VNAI　/ 'い' VMASU　/ 'っ' VTA / 'う' / 'え' "！" / 'おう'
+  / 'ま' VNAI　/ 'み' VMASU　/ 'ん' VDA / 'む' / 'め' "！" / 'もう'
+  / 'が' VNAI　/ 'ぎ' VMASU　/ 'い' VDA / 'ぐ' / 'げ' "！" / 'ごう'
+  / 'ば' VNAI　/ 'び' VMASU　/ 'ん' VDA / 'ぶ' / 'べ' "！" / 'ぼう'
+
+"！" = '！'  // 命令形は ！ をつける
+
+_VERB1 = VNAI / VMASU / VTA / 'る' / 'よう'
+
+VMASU = 
+  / 'ます'  
+  / 'ません'
+  / 'ました'
+
+// 動詞節
+
+VERBAND = 
+  / STEM _VERBAND
+  / VERBPREFIX STEM5 (_VERB5AND / _VERB1AND)
+  / STEM5 (_VERB5AND / _VERB1AND)
+  / VERBPREFIX? STEM1 _VERB1AND
+  / STEM1 _VERB1AND
+
+_VERBAND = 
+  / 'し'　VNAKU / 'せず' / 'し' VMASI / 'し' VTE / 'すれば' 
+
+_VERB5AND =
+  / 'か' VNAKU　/ 'き' VMASI / 'い' VTE / 'けば'　　
+  / 'さ' VNAKU / 'し' VMASI / 'し' VTE / 'せば'　
+  / 'た'　VNAKU　/ 'ち' VMASI / 'っ' VTE / 'てば'
+  / 'な'　VNAKU　/ 'に' VMASI / 'ん' VDE / 'ねば'
+  / 'ら' VNAKU　/ 'り' VMASI / 'っ' VTE / 'れば'
+  / 'わ' VNAKU　/ 'い' VMASI / 'っ' VTE / 'えば'
+  / 'ま' VNAKU　/ 'み' VMASI　/ 'ん' VDE / 'めば'
+  / 'が' VNAKU　/ 'ぎ' VMASI / 'い' VDE / 'げば'
+  / 'ば' VNAKU　/ 'び' VMASI / 'ん' VDE / 'べば'
+
+_VERB1AND = VNAKU / 'ず' / VMASI / VTE / 'れば'
+
+VNAKU = 
+  / 'なくて'
+  / 'なく'  
+  / 'ず'
+
+VMASI = 
+  / 'まして'
+
+VTE =　'て'
+VDE =　'で'
