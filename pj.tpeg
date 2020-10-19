@@ -1,7 +1,10 @@
 // Programmable Japanese
 
 Statement =
-  { Expression+ #Statement }
+  { (Expression / Function / Error) #Statement }
+
+Error = 
+  { .+ #Unknown }
 
 /* Characters */
 
@@ -11,49 +14,60 @@ KATA = [ァ-ヶー・]
 HIRA = [ぁ-ん]
 _ = [ \t]*
 
-/* Expression */
-
-Expression = 
-  / Argument FuncApp
-  / Verbal
-  / Noun
-  / { .* #Unknown }
-
-Argument = 
-  / ArgumentGrouping
-  / { Noun Suffix #Argument }
-
-CastExpression = {^ Noun #Cast } NounSuffix?
-
-NounSuffix = 
-  / {^ OfSuffix NounSuffix #Of }
-  / {^ Suffix #NSuffix } FuncApp?
-
-Suffix = { SUFFIX #Suffix }
-
-FuncApp = {^ Argument* Verbal #FuncApp } CastExpression?
-
 "{{" = '{{' / '＜'
 "}}" = '}}' / '＞'
 
-ArgumentGrouping = { 
-    "{{" Expression "}}"
-    #Argument 
-}
+/* Expression */
+
+Expression = 
+  / "{{" Expression "}}" _NounSuffix?
+  / Function CastNoun? _NounSuffix?
+  / { Argument+ Noun #App }
+  / Noun
+
+_NounSuffix = 
+  / _ConnectedNoun+
+  / {^ Suffix #Argument } _Function
+
+Function = 
+  / {Argument* Verbal #App } 
+  / {Argument* VerbalAnd #App } _AndFunction+
+
+_Function = 
+  / {^ Argument* Verbal #App } 
+  / {^ Argument* VerbalAnd #App } _AndFunction+
+
+_AndFunction = 
+  / {^ TEN? 'または' TEN? Function #Or }
+  / {^ TEN? 'かつ'? TEN? Function #And }
+
+Argument = 
+  / { "{{" Expression (Suffix "}}" / "}}" Suffix ) #Argument }
+  / { Noun Suffix #Argument }
+
+CastNoun = 
+  / {^ 'か' ('どうか'/'否か')? #Bool } 
+  / {^ Noun #Cast } 
+
+
+Suffix = { SUFFIX #Suffix }
 
 // 連体詞
 
 Verbal = 
-  / Verb / Adjective
-  / AdjectiveAnd {^ Expression #And }
-  / VerbAnd {^ Expression #And }
+  / Adjective  // 赤く
+  / Verb       // 書く
+
+VerbalAnd = 
+  / AdjectiveAnd
+  / VerbAnd
 
 //名詞
 
 Noun = CompositeNoun　_ConnectedNoun*
 
 _ConnectedNoun = 
-  {^ OfSuffix CompositeNoun #ConnectedNoun　　}
+  {^ OfSuffix CompositeNoun #ConnectedNoun }
 
 OfSuffix = { OFSUFFIX #Of }
 
@@ -64,7 +78,7 @@ CompositeNoun =
 
 Modifier =
   / { ADJVERB #Adjective }
-  / { VERBNOUN #Verba }
+  // { VERBNOUN #Verb }
 
 PrimaryNoun = 
   / Primary
@@ -72,7 +86,7 @@ PrimaryNoun =
   / "『" {  ("』" .)* "』" #Noun }
   / {VERBPREFIX VERBPREFIX? NOUN? #Noun } // 学び直し
   / { (!VERBPREFIX NOUNCHAR)+ VERBPREFIX NOUN? #Noun } // 上書き モード
-  / { NOUN #Noun }
+  / { NOUN 'さ'? #Noun }
 
 NOUN = NOUNCHAR+
 NOUNCHAR = (KANJI / KATA) // パターン：　漢字とカタカナは名詞
@@ -87,11 +101,12 @@ DICTNOUN =
   / 'の' / 'ため' / 'とき' 
 
 OFSUFFIX =
-  / 'の'　/ 'からの'　/ 'への'
+  / 'の'　/ 'からの'　/ 'への' / 'までの'
 
 SUFFIX =
-  / 'は' / 'が' / 'を'
-  / 'に' / 'で'
+  / 'は' / 'が' / 'を' / 'も'
+  / 'に' / 'で' / 'と' / 'へ'
+  / 'より' / 'から' / 'まで'
   / TEN
 
 VERBDICT =
@@ -104,12 +119,12 @@ VERBDICT =
 Adverb = { ADJPREFIX #Adverb }
 
 Adjective =
-  / { Adverb Adjective #QualifiedAdjective }
-  / { ADJVERB #Adjective }
+  / { Adverb Adjective #QualifiedPredicate }
+  / { ADJVERB #Predicate }
 
 AdjectiveAnd =
-  / { Adverb AdjectiveAnd #QualifiedAdjective }
-  / { ADJAND #Adjective }
+  / { Adverb AdjectiveAnd #QualifiedPredicate }
+  / { ADJAND #Predicate }
 
 ADJPREFIX = 
   'とても' / 'あまり'
@@ -126,7 +141,10 @@ _ADJVERB = // サ変の連体詞
   / 'な' "い"?  // 正確な
   / "い"
 
-"い" = 'い' / 'くない' / 'そうな'
+"い" = 
+  / 'い' 
+  / 'くない' / 'くなる' / 'くする' 
+  / 'そうな'
 
 ADJAND = 
   ASTEM (_ADJAND / HIRA _ADJAND / HIRA HIRA _ADJAND)
@@ -136,23 +154,23 @@ _ADJAND = // 形容詞の連用
   / 'な' "く"  // 正確な
   / "く"
 
-"く" = ('くなく' / 'く') 
+"く" = ('くなく' / 'くなり' / 'くし' 'て'? / 'く' ) 
 
 /* 動詞パターン */
 
 Verb =
-  / { AdjectiveAnd Verb #QualifiedVerb }
-  / { VERB #Verb }
+  / { AdjectiveAnd Verb #QualifiedPredicate }
+  / { VERB #Predicate }
 
 VerbAnd =
-  / { AdjectiveAnd VerbAnd #QualifiedVerb }
-  / { VERBAND #Verb }
+  / { AdjectiveAnd VerbAnd #QualifiedPredicate }
+  / { VERBAND #Predicate }
 
 STEM = /* サ変の語幹 */
   (KANJI / KATA)+
 
 STEM5 = /* 五段活用の語幹 */
-  (KANJI / KATA)
+  (KANJI / KATA+ / [なあ])
 
 STEM1 = /* 一段活用の語幹 */
   / [鋳診観視見経簸着看獲煮流歴恐得干居射寝割似出ゐれみへひねにでてせきえうい]
@@ -160,8 +178,10 @@ STEM1 = /* 一段活用の語幹 */
 
 // 動詞PREFIX ＋　（寄り道） 学び直し
 VERBPREFIX = 
-  / STEM5 [きしちにりいみぎび]
-  / KANJI [いえきけしせちてみめりれにねぎげじぜびべ]
+  / STEM5 [きしちりいみぎび]
+  / KANJI [いえきけしせちてみめりれねぎげじぜびべ]
+
+// 「値に」が名詞になるので、にを除外
 
 // 連体詞
 
@@ -261,3 +281,9 @@ VMASI =
 
 VTE =　'て'
 VDE =　'で'
+
+example Expression カンマ区切りで表示する
+example Expression カンマ区切りで表示した結果
+example Expression 望遠鏡で{{子犬が泳ぐのを}}見た
+example Expression 望遠鏡で{{子犬が泳ぐの}}を見た
+example Expression 望遠鏡で子犬が泳ぐのを見た
