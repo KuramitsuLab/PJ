@@ -202,16 +202,14 @@ ElifStatements = {
     ElifStatement+
 }
 
-ElifStatement = {
-    (@match(INDENT) / LF)
+ElifStatement = (@match(INDENT) / LF) {
     "elif" 
     cond: Expression ":"
     then: (Block / SingleBlock)
     #Elif
 }
 
-ElseStatement = {
-    (@match(INDENT) / LF)
+ElseStatement = (@match(INDENT) / LF) {
     "else" ":"
     (Block / SingleBlock)
     #Else
@@ -329,7 +327,7 @@ SelfAssignment = {
 }
 
 SelfAssignOp = {
-    ('<<' / '>>' / '**' / '//' / [+=*/%&|^＋＝＊／％＆｜＾×÷]) ('='/'＝')
+    ('<<' / '>>' / '**' / '//' / '-' / [+=*/%&|^＋＝＊／％＆｜＾×÷]) ('='/'＝')
 } _
 
 /* Expression */

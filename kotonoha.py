@@ -1,3 +1,4 @@
+import sys
 import pegtree as pg
 from pjcorpus import get_corpus
 
@@ -19,9 +20,15 @@ def chunk(s, fmt='{{%}}'):
         elif nested == 0 and s[i] in "にをがで":
             found = True
             break
+        else:
+            pass
     if found:
         return fmt.replace('%', s)
     return s
+
+def isMultiLine(tree):
+    return '\n' in str(tree)
+
 
 class Transpiler(object):
     buffers: list
@@ -33,6 +40,10 @@ class Transpiler(object):
 
     def pushLF(self):
         self.buffers.append('\n')
+
+    def pushLine(self, tree):
+        s = str(tree).split('\n')
+        self.buffers.append(s[0]+'  ## ')
 
     def compile(self, source):
         tree = puppy_parser(source)
@@ -52,6 +63,11 @@ class Transpiler(object):
             print('@TODO', repr(tree))
             self.push(repr(tree))
 
+    def visitLine(self, tree):
+        self.pushLF()
+        self.pushLine(tree)
+        self.visit(tree)
+
     def stringfy(self, tree, fmt='{{%}}'):
         backups = self.buffers
         self.buffers = []
@@ -61,17 +77,38 @@ class Transpiler(object):
         return chunk(s, fmt)
 
     def acceptSource(self, tree):
+        trees = tree.getSubNodes()
+        for t in trees[:-1]:
+            self.pushLine(t)
+            self.visit(t)
+            self.pushLF()
+        self.pushLine(trees[-1])
+        self.visit(trees[-1])
+
+    def acceptBlock(self, tree):
         if len(tree) == 1:
+            self.pushLine(tree[0])
             self.visit(tree[0])
         else:
-            for t in tree.getSubNodes():
+            trees = tree.getSubNodes()
+            for c, t in enumerate(trees[:-1]):
+                self.pushLine(t)
+                if c > 0:
+                    self.push('そして、')
                 self.visit(t)
                 self.pushLF()
-    
+            self.pushLine(trees[-1])
+            self.push('最後に、')
+            self.visit(trees[-1])
+
+
     def acceptInt(self, tree):
         self.push(str(tree))
 
     def acceptFloat(self, tree):
+        self.push(str(tree))
+
+    def acceptDouble(self, tree):
         self.push(str(tree))
 
     # [#QString 'a']
@@ -86,6 +123,16 @@ class Transpiler(object):
             self.push(fd['name'])
         else:
             self.push(str(tree))
+
+    # [#Tuple 'a']
+    def acceptTuple(self, tree):
+        self.push(self.tuplefy(tree)+'の組')
+
+    def tuplefy(self, tree, max=2):
+        xs = [self.stringfy(t) for t in tree]
+        if len(xs) <= max:
+            return 'と'.join(xs)
+        return '，'.join(xs)
 
     # [#List 'a']
     def acceptList(self, tree):
@@ -144,10 +191,18 @@ class Transpiler(object):
     def acceptMethodExpr(self, tree):
         recv = self.stringfy(tree.recv)
         name = str(tree.name)
-        fd = get_corpus(f'.{name}', recv)
-        p, p2 = self.params(tree.params, fd)
-        p = [recv] + p
-        self.pushFuncApp(name, p, fd, p2)
+        fd = get_corpus(f'{recv}.{name}')
+        if len(fd) > 0:
+            p, p2 = self.params(tree.params, fd)
+            self.pushFuncApp(name, p, fd, p2)
+        else:
+            fd = get_corpus(f'.{name}')
+            if len(fd) > 0:
+                p, p2 = self.params(tree.params, fd)
+                p = [recv] + p
+                self.pushFuncApp(name, p, fd, p2)
+            else:
+                self.push(str(tree))
 
     # [#IndexExpr 'a']
     def acceptIndexExpr(self, tree):
@@ -228,33 +283,130 @@ class Transpiler(object):
     def acceptIf(self, tree):
         cond = self.stringfy(tree.cond, fmt='%')
         self.push(f'もし{cond}のとき、')
-        self.pushBlock(tree.get('then'))
-        if 'else' in tree:
+        body = tree.get('then')
+        if isMultiLine(tree):
+            if len(body) == 1:
+                self.pushLF()
+                self.visit(body)
+            else:
+                self.push(f'以下のとおり')
+                self.pushLF()
+                self.visit(body)
+                self.pushLF()
+                self.push('以上')
+        else:
+            self.visit(body[0])
+        if tree.has('elif'):
+            for t in tree.get('elif').getSubNodes():
+                self.pushLF()
+                self.pushLine(t)
+                self.visit(t)
+        if tree.has('else'):
             self.pushLF()
-            self.push(f'そうでなければ、')
-            self.pushBlock(tree.get('else'))
+            self.push(f'もしそうでなければ、')
+            body = tree.get('else')
+            if isMultiLine(tree):
+                if len(body) == 1:
+                    self.pushLF()
+                    self.visit(body[0])
+                else:
+                    self.push(f'以下のとおり')
+                    self.pushLF()
+                    self.visit(body)
+                    self.pushLF()
+                    self.push('以上')
+            else:
+                self.visit(body[0])
+
+    def acceptElif(self, tree, ):
+        cond = self.stringfy(tree.cond, fmt='%')
+        self.push(f'もしそうでなく、{cond}のとき、')
+        body = tree.get('then')
+        if isMultiLine(tree):
+            if len(body) == 1:
+                self.pushLF()
+                self.visit(body)
+            else:
+                self.push(f'以下のとおり')
+                self.pushLF()
+                self.visit(body)
+                self.pushLF()
+                self.push('以上')
+        else:
+            self.visit(body[0])
 
     def acceptWhile(self, tree):
         cond = self.stringfy(tree.cond, fmt='%')
         self.push(f'もし{cond}のとき、')
-        self.pushBlock(tree.body, 'ことを繰り返す')
+        if isMultiLine(tree):
+            self.push(f'以下を繰り返す')
+            self.pushLF()
+            self.visit(tree.body)
+        else:
+            self.visit(tree.body[0])
+            self.push(f'のを繰り返す')
+
+    def acceptFor(self, tree):
+        each = self.tuplefy(tree.each)
+        iter = self.stringfy(tree.list)
+        self.push(f'{iter}を先頭から順に{each}として、')
+        if isMultiLine(tree):
+            self.push(f'以下を繰り返す')
+            self.pushLF()
+            self.visit(tree.body)
+        else:
+            self.visit(tree.body[0])
+            self.push(f'のを繰り返す')
+
+    # break
+    def acceptBreak(self, tree):
+        self.push(f'この繰り返しを中断する')
+
+    # continue
+    def acceptContinue(self, tree):
+        self.push(f'最初からもう一度、繰り返す')
 
     def pushBlock(self, tree, suffix=''):
-        self.visit(tree[0])
-        self.push(suffix)
+        if len(tree) == 1:
+            self.visit(tree[0])
+            if suffix != '': self.push('の'+suffix)
+        else:
+            if suffix != '': self.push('以下'+suffix)
+            self.visit(tree)
+
+    # def f(a,b):
+    def acceptFuncDecl(self, tree):
+        name = str(tree.name)
+        params = str(tree.params)
+        self.push(f'関数{name}{params}は、以下の通り定義される')
+        self.pushLF()
+        self.visit(tree.body)
+
+    # return
+    def acceptReturn(self, tree):
+        if tree.has('expr'):
+            v = self.stringfy(tree.expr)
+            self.push(f'{v}が関数出力となる')
+        else:
+            self.push(f'関数処理はおしまい')
+
+    def acceptImportDecl(self, tree):
+        name = str(tree.name)
+        self.push(f'{name}モジュールを用いる')
+
+
 
 transpiler = Transpiler()
-print(transpiler.compile('a, b = c\nx,y = y,x'))
-print(transpiler.compile('print("hello,world", end="")'))
-print(transpiler.compile('print(i, fibo(1))'))
+#print(transpiler.compile('a, b = c\nx,y = y,x'))
+#print(transpiler.compile('print("hello,world", end="")'))
+#print(transpiler.compile('print(i, fibo(1))'))
 
 def pj(s):
     return transpiler.compile(s)
 
-print(pj("a+=-1"))
+#print(pj("return a,b"))
 
-print(pj("counter=0"))
-print(pj("while counter <=10 and a[0] >=0 : counter += 1"))
-
-print(pj("if x < y : pass"))
-print(pj("a,b,c =map(int, input().split())"))
+if __name__ == '__main__':
+    if len(sys.argv) > 1:
+        with open(sys.argv[1]) as f:
+            print(pj(f.read()))
