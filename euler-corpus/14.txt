@@ -1,0 +1,49 @@
+def euler014():   ## 関数euler014()は、以下の通り定義される
+N = 10**6   ## Nを{{10を6乗した値}}とする
+cl = [-1] * N   ## clを-1のリストのN倍とする
+cl[1] = 0   ## clの1番目を0とする
+for n in range(2, N):   ## {{2からN未満までの数列}}を先頭から順にnとして、以下を繰り返す
+b = []   ## bを空のリストとする
+while n >= N or cl[n] == -1:   ## もし{{nがN以上}}、または{{clのn番目が-1と等しいか}}のとき、以下を繰り返す
+b.append(n)   ## bにnを追加する
+n = int(n / 2) if n % 2 == 0 else n * 3 + 1   ## nをもし{{{{nを2で割った余り}}が0と等しいか}}のとき{{nを2で割った値}}の整数値、そうでなければ{{{{nに3を掛けた値}}に1を加えた値}}とする
+l = cl[n]   ## lをclのn番目とする
+for m in reversed(b):   ## {{bを反転した列}}を先頭から順にmとして、以下を繰り返す
+l += 1   ## lを1だけ増加させる
+if m < N:   ## もしmがNより小さいとき、
+cl[m] = l   ## clのm番目をlとする
+m = 0   ## mを0とする
+ret = 0   ## retを0とする
+for i, n in enumerate(cl):   ## {{clに番号をつける}}を先頭から順にiとnとして、以下を繰り返す
+if m < n:   ## もしmがnより小さいとき、以下のとおり
+m = n   ## mをnとする
+ret = i   ## retをiとする
+return ret   ## retが関数出力となる
+def euler014_collatz_calc(n):   ## 関数euler014_collatz_calc(n)は、以下の通り定義される
+return int(n / 2) if n % 2 == 0 else n * 3 + 1   ## もし{{{{nを2で割った余り}}が0と等しいか}}のとき{{nを2で割った値}}の整数値、そうでなければ{{{{nに3を掛けた値}}に1を加えた値}}が関数出力となる
+def euler014_collatz_problem_count(n):   ## 関数euler014_collatz_problem_count(n)は、以下の通り定義される
+c = 0   ## cを0とする
+while n != 1:   ## もしnが1と等しくないとき、以下を繰り返す
+n = int(n / 2) if n % 2 == 0 else n * 3 + 1   ## nをもし{{{{nを2で割った余り}}が0と等しいか}}のとき{{nを2で割った値}}の整数値、そうでなければ{{{{nに3を掛けた値}}に1を加えた値}}とする
+c += 1   ## cを1だけ増加させる
+return c   ## cが関数出力となる
+def euler014_list_init(l, n):   ## 関数euler014_list_init(l, n)は、以下の通り定義される
+ret = []   ## retを空のリストとする
+for i in range(l):   ## {{0からl未満までの数列}}を先頭から順にiとして、以下を繰り返す
+ret.append(n)   ## retにnを追加する
+return ret   ## retが関数出力となる
+def euler014_list_enum(l):   ## 関数euler014_list_enum(l)は、以下の通り定義される
+ret = []   ## retを空のリストとする
+for i in range(len(l)):   ## {{0からlの長さ未満までの数列}}を先頭から順にiとして、以下を繰り返す
+ret.append((i, l[i]))   ## retにiとlのi番目の組を追加する
+return ret   ## retが関数出力となる
+def euler014_list_reverse(l):   ## 関数euler014_list_reverse(l)は、以下の通り定義される
+ret = []   ## retを空のリストとする
+for i in reversed(l):   ## {{lを反転した列}}を先頭から順にiとして、以下を繰り返す
+ret.append(i)   ## retにiを追加する
+return ret   ## retが関数出力となる
+def euler014_make_range_list(s, e):   ## 関数euler014_make_range_list(s, e)は、以下の通り定義される
+ret = []   ## retを空のリストとする
+for i in range(s, e):   ## {{sからe未満までの数列}}を先頭から順にiとして、以下を繰り返す
+ret.append(i)   ## retにiを追加する
+return ret   ## retが関数出力となる

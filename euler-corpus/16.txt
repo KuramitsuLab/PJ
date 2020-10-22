@@ -1,0 +1,27 @@
+def euler016():   ## 関数euler016()は、以下の通り定義される
+q = str(2**1000)   ## qを{{2を1000乗した値}}の文字列とする
+s = 0   ## sを0とする
+for x in q:   ## qを先頭から順にxとして、以下を繰り返す
+s += int(x)   ## sをxの整数値だけ増加させる
+return s   ## sが関数出力となる
+def euler016_all_digit_sum(n):   ## 関数euler016_all_digit_sum(n)は、以下の通り定義される
+q = str(n)   ## qをnの文字列とする
+s = 0   ## sを0とする
+for ch in q:   ## qを先頭から順にchとして、以下を繰り返す
+s += int(ch)   ## sをchの整数値だけ増加させる
+return s   ## sが関数出力となる
+def euler016_n_separate_digit(n):   ## 関数euler016_n_separate_digit(n)は、以下の通り定義される
+ret = [n % 10]   ## retを{{nを10で割った余り}}のリストとする
+while int(n / 10) > 0:   ## もし{{nを10で割った値}}の整数値が0より大きいとき、以下を繰り返す
+n = int(n / 10)   ## nを{{nを10で割った値}}の整数値とする
+ret.insert(0, n % 10)   ## ret.insert(0, n % 10) # retの先頭にnを10で割った余りを追加する
+return ret   ## retが関数出力となる
+def euler016_a_exp_b(a, b):   ## 関数euler016_a_exp_b(a, b)は、以下の通り定義される
+res = 1   ## resを1とする
+c = 0   ## cを0とする
+while c < b:   ## もしcがbより小さいとき、以下を繰り返す
+res *= a   ## resをa倍にする
+c += 1   ## cを1だけ増加させる
+return res   ## resが関数出力となる
+def euler016_a_exp_b_a(a, b):   ## 関数euler016_a_exp_b_a(a, b)は、以下の通り定義される
+return a**b   ## {{aをb乗した値}}が関数出力となる

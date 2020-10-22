@@ -1,0 +1,28 @@
+def euler009():   ## 関数euler009()は、以下の通り定義される
+for i in range(1, 1000):   ## {{1から1000未満までの数列}}を先頭から順にiとして、以下を繰り返す
+for j in range(i, 1000):   ## {{iから1000未満までの数列}}を先頭から順にjとして、以下を繰り返す
+for k in range(j, 1000):   ## {{jから1000未満までの数列}}を先頭から順にkとして、以下を繰り返す
+p = i * i + j * j   ## pを{{{{iにiを掛けた値}}に{{jにjを掛けた値}}を加えた値}}とする
+if p == k * k and i + j + k == 1000:   ## もし{{pが{{kにkを掛けた値}}と等しいか}}、かつ{{{{iにjを加えた値}}にkを加えた値}}が1000と等しいとき、
+return i * j * k   ## {{{{iにjを掛けた値}}にkを掛けた値}}が関数出力となる
+def euler009_is_pythagoras(a, b, c):   ## 関数euler009_is_pythagoras(a, b, c)は、以下の通り定義される
+return a * a + b * b == c * c   ## {{{{aにaを掛けた値}}に{{bにbを掛けた値}}を加えた値}}が{{cにcを掛けた値}}と等しいかが関数出力となる
+def euler009_n_square(n):   ## 関数euler009_n_square(n)は、以下の通り定義される
+return n * n   ## {{nにnを掛けた値}}が関数出力となる
+def euler009_n_square_a(n):   ## 関数euler009_n_square_a(n)は、以下の通り定義される
+ret = 0   ## retを0とする
+for i in range(n):   ## {{0からn未満までの数列}}を先頭から順にiとして、以下を繰り返す
+ret += n   ## retをnだけ増加させる
+return ret   ## retが関数出力となる
+def euler009_is_sum_equation1000(tp):   ## 関数euler009_is_sum_equation1000(tp)は、以下の通り定義される
+s = 0   ## sを0とする
+for x in tp:   ## tpを先頭から順にxとして、以下を繰り返す
+s += x   ## sをxだけ増加させる
+return s == 1000   ## {{sが1000と等しいか}}が関数出力となる
+def euler009_is_sum_equation1000_a(tp):   ## 関数euler009_is_sum_equation1000_a(tp)は、以下の通り定義される
+return sum(tp) == 1000   ## {{tpの総和が1000と等しいか}}が関数出力となる
+def euler009_all_product(l):   ## 関数euler009_all_product(l)は、以下の通り定義される
+ret = 1   ## retを1とする
+for a in l:   ## lを先頭から順にaとして、以下を繰り返す
+ret *= a   ## retをa倍にする
+return ret   ## retが関数出力となる

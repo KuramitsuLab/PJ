@@ -1,0 +1,30 @@
+def euler015():   ## 関数euler015()は、以下の通り定義される
+facts = [1] * 21   ## factsを1のリストの21倍とする
+for i in range(20):   ## {{0から20未満までの数列}}を先頭から順にiとして、以下を繰り返す
+facts[i + 1] = facts[i] * (i + 1)   ## factsの{{iに1を加えた値}}番目を{{factsのi番目に{{iに1を加えた値}}を掛けた値}}とする
+dinomials = [0] * 21   ## dinomialsを0のリストの21倍とする
+for i in range(21):   ## {{0から21未満までの数列}}を先頭から順にiとして、以下を繰り返す
+dinomials[i] = int(facts[20] / (facts[i] * facts[20 - i]))   ## dinomialsのi番目を{{factsの20番目を{{factsのi番目にfactsの{{20からiを引いた値}}番目を掛けた値}}で割った値}}の整数値とする
+for i in range(20):   ## {{0から20未満までの数列}}を先頭から順にiとして、以下を繰り返す
+for j in range(20):   ## {{0から20未満までの数列}}を先頭から順にjとして、以下を繰り返す
+dinomials[j] += dinomials[j + 1]   ## dinomialsのj番目をdinomialsの{{jに1を加えた値}}番目だけ増加させる
+return dinomials[0]   ## dinomialsの先頭が関数出力となる
+def euler015_combination(n, r):   ## 関数euler015_combination(n, r)は、以下の通り定義される
+facts = [1] * (n + 1)   ## factsを1のリストの{{nに1を加えた値}}倍とする
+for x in range(n):   ## {{0からn未満までの数列}}を先頭から順にxとして、以下を繰り返す
+facts[x + 1] = facts[x] * (x + 1)   ## factsの{{xに1を加えた値}}番目を{{factsのx番目に{{xに1を加えた値}}を掛けた値}}とする
+return int(facts[n] / (facts[r] * facts[n - r]))   ## {{factsのn番目を{{factsのr番目にfactsの{{nからrを引いた値}}番目を掛けた値}}で割った値}}の整数値が関数出力となる
+def euler015_all_factorials(n):   ## 関数euler015_all_factorials(n)は、以下の通り定義される
+facts = [1] * (n + 1)   ## factsを1のリストの{{nに1を加えた値}}倍とする
+for x in range(n):   ## {{0からn未満までの数列}}を先頭から順にxとして、以下を繰り返す
+facts[x + 1] = facts[x] * (x + 1)   ## factsの{{xに1を加えた値}}番目を{{factsのx番目に{{xに1を加えた値}}を掛けた値}}とする
+return facts   ## factsが関数出力となる
+def euler015_pascal_triangle(n):   ## 関数euler015_pascal_triangle(n)は、以下の通り定義される
+if n == 1:   ## もしnが1と等しいとき、
+return [1]   ## 1のリストが関数出力となる
+もしそうでなければ、
+l = euler015_pascal_triangle(n - 1)   ## lをeuler015_pascal_triangle({{nから1を引いた値}})とする
+ret = [l[0], l[-1]]   ## retをlの先頭とlの-1番目のリストとする
+for i in range(n - 2):   ## {{0から{{nから2を引いた値}}未満までの数列}}を先頭から順にiとして、以下を繰り返す
+ret.insert(i + 1, l[i] + l[i + 1])   ## ret.insert(i + 1, l[i] + l[i + 1]) # retのi+1番目にlのi番目とi+1番目の要素の和を追加する
+return ret   ## retが関数出力となる

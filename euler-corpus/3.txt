@@ -1,0 +1,14 @@
+def euler003():   ## 関数euler003()は、以下の通り定義される
+n = 600851475143   ## nを600851475143とする
+i = 2   ## iを2とする
+while i * i < n:   ## もし{{iにiを掛けた値}}がnより小さいとき、以下を繰り返す
+while n % i == 0:   ## もし{{nをiで割った余り}}が0と等しいとき、以下を繰り返す
+n = n / i   ## nを{{nをiで割った値}}とする
+i = i + 1   ## iを{{iに1を加えた値}}とする
+return int(n)   ## nの整数値が関数出力となる
+def euler003_n_morethan_square(a, n):   ## 関数euler003_n_morethan_square(a, n)は、以下の通り定義される
+return a * a < n   ## {{{{aにaを掛けた値}}がnより小さいか}}が関数出力となる
+def euler003_n_divide_a(n, a):   ## 関数euler003_n_divide_a(n, a)は、以下の通り定義される
+while n % a == 0:   ## もし{{nをaで割った余り}}が0と等しいとき、以下を繰り返す
+n /= a   ## nをa分の一にする
+return int(n)   ## nの整数値が関数出力となる

@@ -1,0 +1,45 @@
+def euler010():   ## 関数euler010()は、以下の通り定義される
+p = [True] * 2000000   ## pを真のリストの2000000倍とする
+for x in range(2, int(2000000**0.5) + 1):   ## 2から{{{{2000000を0.5乗した値}}の整数値に1を加えた値}}未満までの数列を先頭から順にxとして、以下を繰り返す
+if p[x]:   ## もしpのx番目のとき、
+for i in range(2 * x, len(p), x):   ## {{{{2にxを掛けた値}}からpの長さ未満までのx間隔の数列}}を先頭から順にiとして、以下を繰り返す
+p[i] = False   ## pのi番目を偽とする
+ret = []   ## retを空のリストとする
+for i in range(2, 2000000):   ## {{2から2000000未満までの数列}}を先頭から順にiとして、以下を繰り返す
+if p[i]:   ## もしpのi番目のとき、
+ret.append(i)   ## retにiを追加する
+return sum(ret)   ## retの総和が関数出力となる
+def euler010_enum_prime(n):   ## 関数euler010_enum_prime(n)は、以下の通り定義される
+p = [True] * n   ## pを真のリストのn倍とする
+for x in range(2, int(n**0.5) + 1):   ## 2から{{{{nを0.5乗した値}}の整数値に1を加えた値}}未満までの数列を先頭から順にxとして、以下を繰り返す
+if p[x]:   ## もしpのx番目のとき、
+for i in range(2 * x, len(p), x):   ## {{{{2にxを掛けた値}}からpの長さ未満までのx間隔の数列}}を先頭から順にiとして、以下を繰り返す
+p[i] = False   ## pのi番目を偽とする
+ret = []   ## retを空のリストとする
+for i in range(2, n):   ## {{2からn未満までの数列}}を先頭から順にiとして、以下を繰り返す
+if p[i]:   ## もしpのi番目のとき、
+ret.append(i)   ## retにiを追加する
+return ret   ## retが関数出力となる
+def euler010_n_is_prime(n):   ## 関数euler010_n_is_prime(n)は、以下の通り定義される
+judge = True   ## judgeを真とする
+if n < 2:   ## もしnが2より小さいとき、
+return False   ## 偽が関数出力となる
+elif n == 2:   ## もしそうでなく、nが2と等しいとき、
+return True   ## 真が関数出力となる
+for i in range(2, int(n**0.5) + 1):   ## 2から{{{{nを0.5乗した値}}の整数値に1を加えた値}}未満までの数列を先頭から順にiとして、以下を繰り返す
+if judge and n % i == 0:   ## もしjudge、かつ{{{{nをiで割った余り}}が0と等しいか}}のとき、
+judge = False   ## judgeを偽とする
+return judge   ## judgeが関数出力となる
+def euler010_list_sum(l):   ## 関数euler010_list_sum(l)は、以下の通り定義される
+s = 0   ## sを0とする
+for x in l:   ## lを先頭から順にxとして、以下を繰り返す
+s += x   ## sをxだけ増加させる
+return s   ## sが関数出力となる
+def euler010_list_sum_a(l):   ## 関数euler010_list_sum_a(l)は、以下の通り定義される
+return sum(l)   ## lの総和が関数出力となる
+def euler010_n_multiple_list(s, e, d):   ## 関数euler010_n_multiple_list(s, e, d)は、以下の通り定義される
+ret = []   ## retを空のリストとする
+while s < e:   ## もしsがeより小さいとき、以下を繰り返す
+ret.append(s)   ## retにsを追加する
+s += d   ## sをdだけ増加させる
+return ret   ## retが関数出力となる

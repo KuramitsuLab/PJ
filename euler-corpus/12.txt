@@ -1,0 +1,95 @@
+def euler012():   ## 関数euler012()は、以下の通り定義される
+s = 1   ## sを1とする
+c = 0   ## cを0とする
+pl = [2]   ## plを2のリストとする
+fl = [1] * 4 + [0] * 96   ## flを1のリストの{{4に0のリストの96倍を加えた値}}倍とする
+while c < 500:   ## もしcが500より小さいとき、以下を繰り返す
+tn = sum(range(1, s + 1))   ## tnを{{1から{{sに1を加えた値}}未満までの数列}}の総和とする
+if not s % 2:   ## もし{{sを2で割った余り}}の反対のとき、
+t = (int(s / 2), s + 1)   ## tを{{sを2で割った値}}の整数値と{{sに1を加えた値}}の組とする
+もしそうでなければ、
+t = (s, int((s + 1) / 2))   ## tをsと{{{{sに1を加えた値}}を2で割った値}}の整数値の組とする
+fc = 1   ## fcを1とする
+for x in t:   ## tを先頭から順にxとして、以下を繰り返す
+if len(fl) < x:   ## もしflの長さがxより小さいとき、以下のとおり
+l = [0] * (x - len(fl) + 1)   ## lを0のリストの{{{{xからflの長さを引いた値}}に1を加えた値}}倍とする
+fl += l   ## flをlだけ増加させる
+if not fl[x]:   ## もしflのx番目の反対のとき、以下のとおり
+nc = 1   ## ncを1とする
+for i in range(pl[-1], x + 1):   ## {{plの-1番目から{{xに1を加えた値}}未満までの数列}}を先頭から順にiとして、以下を繰り返す
+for j in range(2, int(x**0.5) + 1):   ## 2から{{{{xを0.5乗した値}}の整数値に1を加えた値}}未満までの数列を先頭から順にjとして、以下を繰り返す
+if i % j == 0:   ## もし{{iをjで割った余り}}が0と等しいとき、
+break   ## この繰り返しを中断する
+for i in pl:   ## plを先頭から順にiとして、以下を繰り返す
+if i > int(tn / 2):   ## もしiが{{tnを2で割った値}}の整数値より大きいとき、
+break   ## この繰り返しを中断する
+if x % i == 0:   ## もし{{xをiで割った余り}}が0と等しいとき、以下のとおり
+j = 1   ## jを1とする
+a = tn   ## aをtnとする
+while a % i == 0:   ## もし{{aをiで割った余り}}が0と等しいとき、以下を繰り返す
+a /= i   ## aをi分の一にする
+j += 1   ## jを1だけ増加させる
+fl[x] = nc   ## flのx番目をncとする
+fc *= fl[x]   ## fcをflのx番目倍にする
+s += 1   ## sを1だけ増加させる
+c = fc   ## cをfcとする
+return tn   ## tnが関数出力となる
+def euler012_a_over_b(a, b):   ## 関数euler012_a_over_b(a, b)は、以下の通り定義される
+return b < a   ## {{bがaより小さいか}}が関数出力となる
+def euler012_range_prime_enumerate(s, e):   ## 関数euler012_range_prime_enumerate(s, e)は、以下の通り定義される
+pl = []   ## plを空のリストとする
+if s <= 1:   ## もしsが1以下のとき、
+s = 2   ## sを2とする
+for i in range(s, e + 1):   ## {{sから{{eに1を加えた値}}未満までの数列}}を先頭から順にiとして、以下を繰り返す
+f = True   ## fを真とする
+for j in range(2, int(i**0.5) + 1):   ## 2から{{{{iを0.5乗した値}}の整数値に1を加えた値}}未満までの数列を先頭から順にjとして、以下を繰り返す
+if i % j == 0:   ## もし{{iをjで割った余り}}が0と等しいとき、
+break   ## この繰り返しを中断する
+return pl   ## plが関数出力となる
+def euler012_is_coprime(a, b):   ## 関数euler012_is_coprime(a, b)は、以下の通り定義される
+while b != 0:   ## もしbが0と等しくないとき、以下を繰り返す
+a, b = b, a % b   ## aを{{aをbで割った余り}}とするbをbとする
+return a == 1   ## {{aが1と等しいか}}が関数出力となる
+def euler012_count_division(n, a):   ## 関数euler012_count_division(n, a)は、以下の通り定義される
+ret = 0   ## retを0とする
+while n % a == 0:   ## もし{{nをaで割った余り}}が0と等しいとき、以下を繰り返す
+n /= a   ## nをa分の一にする
+ret += 1   ## retを1だけ増加させる
+return ret   ## retが関数出力となる
+def euler012_prime_factorize(n):   ## 関数euler012_prime_factorize(n)は、以下の通り定義される
+primes = [True] * (n + 1)   ## primesを真のリストの{{nに1を加えた値}}倍とする
+p = []   ## pを空のリストとする
+for i in range(2, int(n**0.5) + 1):   ## 2から{{{{nを0.5乗した値}}の整数値に1を加えた値}}未満までの数列を先頭から順にiとして、以下を繰り返す
+if primes[i]:   ## もしprimesのi番目のとき、
+for j in range(i + i, n + 1, i):   ## {{{{iにiを加えた値}}から{{nに1を加えた値}}未満までのi間隔の数列}}を先頭から順にjとして、以下を繰り返す
+primes[j] = False   ## primesのj番目を偽とする
+for i in range(2, n + 1):   ## {{2から{{nに1を加えた値}}未満までの数列}}を先頭から順にiとして、以下を繰り返す
+if primes[i]:   ## もしprimesのi番目のとき、
+p.append(i)   ## pにiを追加する
+fl = []   ## flを空のリストとする
+for x in p:   ## pを先頭から順にxとして、以下を繰り返す
+if n % x == 0:   ## もし{{nをxで割った余り}}が0と等しいとき、以下のとおり
+a = n   ## aをnとする
+c = 0   ## cを0とする
+while a % x == 0:   ## もし{{aをxで割った余り}}が0と等しいとき、以下を繰り返す
+a /= x   ## aをx分の一にする
+c += 1   ## cを1だけ増加させる
+return fl   ## flが関数出力となる
+def euler012_nth_triangular_number(n):   ## 関数euler012_nth_triangular_number(n)は、以下の通り定義される
+return sum(range(1, n + 1))   ## {{1から{{nに1を加えた値}}未満までの数列}}の総和が関数出力となる
+def euler012_next_triangular_number(tn):   ## 関数euler012_next_triangular_number(tn)は、以下の通り定義される
+ret = 0   ## retを0とする
+c = 1   ## cを1とする
+while ret <= tn:   ## もしretがtn以下のとき、以下を繰り返す
+ret += c   ## retをcだけ増加させる
+c += 1   ## cを1だけ増加させる
+return ret   ## retが関数出力となる
+def euler012_count_divisor(expl):   ## 関数euler012_count_divisor(expl)は、以下の通り定義される
+ret = 1   ## retを1とする
+for x in expl:   ## explを先頭から順にxとして、以下を繰り返す
+ret *= (x + 1)   ## retを{{xに1を加えた値}}倍にする
+return ret   ## retが関数出力となる
+def euler012_is_list_empty(l):   ## 関数euler012_is_list_empty(l)は、以下の通り定義される
+return not l   ## lの反対が関数出力となる
+def euler012_is_list_empty_a(l):   ## 関数euler012_is_list_empty_a(l)は、以下の通り定義される
+return len(l) == 0   ## {{lの長さが0と等しいか}}が関数出力となる

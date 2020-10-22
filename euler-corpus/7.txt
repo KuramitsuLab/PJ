@@ -1,0 +1,39 @@
+@TODO [#ListForExpr append: [#Name 'i'][#ForExpr each: [#Name 'i']list: [#ApplyExpr name: [#Name 'range']params: [#Arguments [#Int '2'][#Infix left: [#ApplyExpr name: [#Name 'int']params: [#Arguments [#MethodExpr recv: [#Name 'math']name: [#Name 'sqrt']params: [#Arguments [#Name 'p']]]]]name: [#Name '+']right: [#Int '1']]]]cond: [#Infix left: [#Infix left: [#Name 'p']name: [#Name '%']right: [#Name 'i']]name: [#Name '==']right: [#Int '0']]]]
+def euler007():   ## 関数euler007()は、以下の通り定義される
+count = 0   ## countを0とする
+p = 1   ## pを1とする
+pl = []   ## plを空のリストとする
+while count < 10001:   ## もしcountが10001より小さいとき、以下を繰り返す
+p += 1   ## pを1だけ増加させる
+l = [ i for i in range(2, int(math.sqrt(p)) + 1) if p % i == 0 ]   ## lを[#ListForExpr append: [#Name 'i'][#ForExpr each: [#Name 'i']list: [#ApplyExpr name: [#Name 'range']params: [#Arguments [#Int '2'][#Infix left: [#ApplyExpr name: [#Name 'int']params: [#Arguments [#MethodExpr recv: [#Name 'math']name: [#Name 'sqrt']params: [#Arguments [#Name 'p']]]]]name: [#Name '+']right: [#Int '1']]]]cond: [#Infix left: [#Infix left: [#Name 'p']name: [#Name '%']right: [#Name 'i']]name: [#Name '==']right: [#Int '0']]]]とする
+if len(l) == 0:   ## もしlの長さが0と等しいとき、
+count += 1   ## countを1だけ増加させる
+return p   ## pが関数出力となる
+def euler007_n_division(a, n):   ## 関数euler007_n_division(a, n)は、以下の通り定義される
+return a % n == 0   ## {{{{aをnで割った余り}}が0と等しいか}}が関数出力となる
+def euler007_n_division_a(a, n):   ## 関数euler007_n_division_a(a, n)は、以下の通り定義される
+while a > 0:   ## もしaが0より大きいとき、以下を繰り返す
+a -= n   ## aをnだけ減少させる
+return a == 0   ## {{aが0と等しいか}}が関数出力となる
+def euler007_is_prime(a):   ## 関数euler007_is_prime(a)は、以下の通り定義される
+dl = []   ## dlを空のリストとする
+for i in range(2, a):   ## {{2からa未満までの数列}}を先頭から順にiとして、以下を繰り返す
+if a % i == 0:   ## もし{{aをiで割った余り}}が0と等しいとき、
+dl.append(i)   ## dlにiを追加する
+return len(dl) == 0   ## {{dlの長さが0と等しいか}}が関数出力となる
+def euler007_is_prime_a(a):   ## 関数euler007_is_prime_a(a)は、以下の通り定義される
+if a < 2:   ## もしaが2より小さいとき、
+return False   ## 偽が関数出力となる
+elif a == 2:   ## もしそうでなく、aが2と等しいとき、
+return True   ## 真が関数出力となる
+もしそうでなければ、
+for i in range(2, int(a**0.5) + 1):   ## 2から{{{{aを0.5乗した値}}の整数値に1を加えた値}}未満までの数列を先頭から順にiとして、以下を繰り返す
+if a % i == 0:   ## もし{{aをiで割った余り}}が0と等しいとき、
+return False   ## 偽が関数出力となる
+return True   ## 真が関数出力となる
+def euler007_succ(a):   ## 関数euler007_succ(a)は、以下の通り定義される
+return a + 1   ## {{aに1を加えた値}}が関数出力となる
+def euler007_is_less(a, b):   ## 関数euler007_is_less(a, b)は、以下の通り定義される
+return a < b   ## {{aがbより小さいか}}が関数出力となる
+def euler007_is_equale_zero(a):   ## 関数euler007_is_equale_zero(a)は、以下の通り定義される
+return a == 0   ## {{aが0と等しいか}}が関数出力となる

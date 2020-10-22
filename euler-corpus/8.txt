@@ -1,0 +1,36 @@
+def euler008():   ## 関数euler008()は、以下の通り定義される
+sl = []   ## slを空のリストとする
+for i in range(5):   ## {{0から5未満までの数列}}を先頭から順にiとして、以下を繰り返す
+sl.append(int(s[i]))   ## slにsのi番目の整数値を追加する
+m = 1   ## mを1とする
+for i in sl:   ## slを先頭から順にiとして、以下を繰り返す
+m *= i   ## mをi倍にする
+for i in range(5, len(s)):   ## {{5からsの長さ未満までの数列}}を先頭から順にiとして、以下を繰り返す
+sl.append(int(s[i]))   ## slにsのi番目の整数値を追加する
+sl.pop(0)   ## sl.pop(0) # slの最初の要素を削除する
+a = 1   ## aを1とする
+for j in sl:   ## slを先頭から順にjとして、以下を繰り返す
+a *= j   ## aをj倍にする
+m = max(m, a)   ## mをmとaの最大値とする
+return m   ## mが関数出力となる
+def euler008_all_product(l):   ## 関数euler008_all_product(l)は、以下の通り定義される
+ret = 1   ## retを1とする
+for x in l:   ## lを先頭から順にxとして、以下を繰り返す
+ret *= x   ## retをx倍にする
+return ret   ## retが関数出力となる
+def euler008_list_slice(l, s, c):   ## 関数euler008_list_slice(l, s, c)は、以下の通り定義される
+ret = []   ## retを空のリストとする
+for i in range(c):   ## {{0からc未満までの数列}}を先頭から順にiとして、以下を繰り返す
+ret.append(l[s + i])   ## retにlの{{sにiを加えた値}}番目を追加する
+return ret   ## retが関数出力となる
+def euler008_elem_max(a, b):   ## 関数euler008_elem_max(a, b)は、以下の通り定義される
+return b if a < b else a   ## {{もし{{aがbより小さいか}}のときb、そうでなければa}}が関数出力となる
+def euler008_elem_max_a(a, b):   ## 関数euler008_elem_max_a(a, b)は、以下の通り定義される
+return max(a, b)   ## aとbの最大値が関数出力となる
+def euler008_list_add(l, a):   ## 関数euler008_list_add(l, a)は、以下の通り定義される
+tmp = [a]   ## tmpをaのリストとする
+l += tmp   ## lをtmpだけ増加させる
+return l   ## lが関数出力となる
+def euler008_list_add_a(l, a):   ## 関数euler008_list_add_a(l, a)は、以下の通り定義される
+l.append(a)   ## lにaを追加する
+return l   ## lが関数出力となる

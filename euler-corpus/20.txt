@@ -1,0 +1,20 @@
+def euler020():   ## 関数euler020()は、以下の通り定義される
+fact = 1   ## factを1とする
+for i in range(100):   ## {{0から100未満までの数列}}を先頭から順にiとして、以下を繰り返す
+fact *= (i + 1)   ## factを{{iに1を加えた値}}倍にする
+s = str(fact)   ## sをfactの文字列とする
+q = []   ## qを空のリストとする
+for ch in s:   ## sを先頭から順にchとして、以下を繰り返す
+q.append(int(ch))   ## qにchの整数値を追加する
+return sum(q)   ## qの総和が関数出力となる
+def euler020_factorial(n):   ## 関数euler020_factorial(n)は、以下の通り定義される
+ret = 1   ## retを1とする
+for x in range(n):   ## {{0からn未満までの数列}}を先頭から順にxとして、以下を繰り返す
+ret *= (x + 1)   ## retを{{xに1を加えた値}}倍にする
+return ret   ## retが関数出力となる
+def euler020_digit_sum(n):   ## 関数euler020_digit_sum(n)は、以下の通り定義される
+q = str(n)   ## qをnの文字列とする
+s = 0   ## sを0とする
+for x in q:   ## qを先頭から順にxとして、以下を繰り返す
+s += int(x)   ## sをxの整数値だけ増加させる
+return s   ## sが関数出力となる

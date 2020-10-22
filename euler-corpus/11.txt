@@ -1,0 +1,64 @@
+@TODO [#MultiString '""']
+def euler011():   ## 関数euler011()は、以下の通り定義される
+grid = """""".split()   ## gridを{{[#MultiString '""']を空白で分割した文字列リスト}}とする
+q = []   ## qを空のリストとする
+for ch in grid:   ## gridを先頭から順にchとして、以下を繰り返す
+q.append(int(ch))   ## qにchの整数値を追加する
+m = 0   ## mを0とする
+for i in range(20):   ## {{0から20未満までの数列}}を先頭から順にiとして、以下を繰り返す
+for j in range(20):   ## {{0から20未満までの数列}}を先頭から順にjとして、以下を繰り返す
+if j <= 16:   ## もしjが16以下のとき、以下のとおり
+m = max(m, q[i*20+j] * q[i*20+j+1] * q[i*20+j+2] * q[i*20+j+3])   ## mをmとqの{{{{iに20を掛けた値}}にjを加えた値}}番目にqの{{{{iに20を掛けた値}}にjを加えた値}}に1を加えた値番目を掛けた値にqの{{{{iに20を掛けた値}}にjを加えた値}}に2を加えた値番目を掛けた値にqの{{{{iに20を掛けた値}}にjを加えた値}}に3を加えた値番目を掛けた値の最大値とする
+if i <= 16:   ## もしiが16以下のとき、
+m = max(m, q[i*20+j] * q[(i+1)*20+j+1] * q[(i+2)*20+j+2] * q[(i+3)*20+j+3])   ## mをmとqの{{{{iに20を掛けた値}}にjを加えた値}}番目にqの{{{{iに1を加えた値}}に20を掛けた値}}にjを加えた値に1を加えた値番目を掛けた値にqの{{{{iに2を加えた値}}に20を掛けた値}}にjを加えた値に2を加えた値番目を掛けた値にqの{{{{iに3を加えた値}}に20を掛けた値}}にjを加えた値に3を加えた値番目を掛けた値の最大値とする
+if 4 <= j and i <= 16:   ## もし{{4がj以下}}、かつ{{iが16以下}}のとき、
+m = max(m, q[i*20+j] * q[(i+1)*20+j-1] * q[(i+2)*20+j-2] * q[(i+3)*20+j-3])   ## mをmとqの{{{{iに20を掛けた値}}にjを加えた値}}番目にqの{{{{iに1を加えた値}}に20を掛けた値}}にjを加えた値から1を引いた値番目を掛けた値にqの{{{{iに2を加えた値}}に20を掛けた値}}にjを加えた値から2を引いた値番目を掛けた値にqの{{{{iに3を加えた値}}に20を掛けた値}}にjを加えた値から3を引いた値番目を掛けた値の最大値とする
+if i <= 16:   ## もしiが16以下のとき、
+m = max(m, q[i*20+j] * q[(i+1)*20+j] * q[(i+2)*20+j] * q[(i+3)*20+j])   ## mをmとqの{{{{iに20を掛けた値}}にjを加えた値}}番目にqの{{{{iに1を加えた値}}に20を掛けた値}}にjを加えた値番目を掛けた値にqの{{{{iに2を加えた値}}に20を掛けた値}}にjを加えた値番目を掛けた値にqの{{{{iに3を加えた値}}に20を掛けた値}}にjを加えた値番目を掛けた値の最大値とする
+return m   ## mが関数出力となる
+def euler011_less_or_equal(a, b):   ## 関数euler011_less_or_equal(a, b)は、以下の通り定義される
+return a <= b   ## {{aがb以下}}が関数出力となる
+def euler011_less_or_equal_a(a, b):   ## 関数euler011_less_or_equal_a(a, b)は、以下の通り定義される
+res = b - a   ## resを{{bからaを引いた値}}とする
+return res >= 0   ## {{resが0以上}}が関数出力となる
+def euler011_over_or_equal(a, b):   ## 関数euler011_over_or_equal(a, b)は、以下の通り定義される
+return b <= a   ## {{bがa以下}}が関数出力となる
+def euler011_over_or_equal_a(a, b):   ## 関数euler011_over_or_equal_a(a, b)は、以下の通り定義される
+res = b - a   ## resを{{bからaを引いた値}}とする
+return res <= 0   ## {{resが0以下}}が関数出力となる
+def euler011_string_space_split(s):   ## 関数euler011_string_space_split(s)は、以下の通り定義される
+sl = []   ## slを空のリストとする
+buf = ""   ## bufを""とする
+for ch in s:   ## sを先頭から順にchとして、以下を繰り返す
+if ch == " ":   ## もしchが" "と等しいとき、以下のとおり
+sl.append(buf)   ## slにbufを追加する
+buf = ""   ## bufを""とする
+もしそうでなければ、
+buf += ch   ## bufをchだけ増加させる
+sl.append(buf)   ## slにbufを追加する
+return sl   ## slが関数出力となる
+def euler011_zero_to_n_list(n):   ## 関数euler011_zero_to_n_list(n)は、以下の通り定義される
+ret = []   ## retを空のリストとする
+a = 0   ## aを0とする
+while a < n:   ## もしaがnより小さいとき、以下を繰り返す
+ret.append(a)   ## retにaを追加する
+a += 1   ## aを1だけ増加させる
+return ret   ## retが関数出力となる
+def euler011_zero_to_n_list_a(n):   ## 関数euler011_zero_to_n_list_a(n)は、以下の通り定義される
+return list(range(n))   ## {{0からn未満までの数列}}のリストが関数出力となる
+def euler011_upward_point(x, y):   ## 関数euler011_upward_point(x, y)は、以下の通り定義される
+return (x, y - 1)   ## xと{{yから1を引いた値}}の組が関数出力となる
+def euler011_downward_point(x, y):   ## 関数euler011_downward_point(x, y)は、以下の通り定義される
+return (x, y + 1)   ## xと{{yに1を加えた値}}の組が関数出力となる
+def euler011_left_point(x, y):   ## 関数euler011_left_point(x, y)は、以下の通り定義される
+return (x - 1, y)   ## {{xから1を引いた値}}とyの組が関数出力となる
+def euler011_right_point(x, y):   ## 関数euler011_right_point(x, y)は、以下の通り定義される
+return (x + 1, y)   ## {{xに1を加えた値}}とyの組が関数出力となる
+def euler011_upper_left_point(x, y):   ## 関数euler011_upper_left_point(x, y)は、以下の通り定義される
+return (x - 1, y - 1)   ## {{xから1を引いた値}}と{{yから1を引いた値}}の組が関数出力となる
+def euler011_upper_right_point(x, y):   ## 関数euler011_upper_right_point(x, y)は、以下の通り定義される
+return (x + 1, y - 1)   ## {{xに1を加えた値}}と{{yから1を引いた値}}の組が関数出力となる
+def euler011_lower_left_point(x, y):   ## 関数euler011_lower_left_point(x, y)は、以下の通り定義される
+return (x - 1, y + 1)   ## {{xから1を引いた値}}と{{yに1を加えた値}}の組が関数出力となる
+def euler011_lower_right_point(x, y):   ## 関数euler011_lower_right_point(x, y)は、以下の通り定義される
+return (x + 1, y + 1)   ## {{xに1を加えた値}}と{{yに1を加えた値}}の組が関数出力となる

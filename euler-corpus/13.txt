@@ -1,0 +1,19 @@
+def euler013():   ## 関数euler013()は、以下の通り定義される
+q = []   ## qを空のリストとする
+a = str(sum(q))   ## aをqの総和の文字列とする
+ret = ""   ## retを""とする
+for i, ch in enumerate(a):   ## {{aに番号をつける}}を先頭から順にiとchとして、以下を繰り返す
+if i < 10:   ## もしiが10より小さいとき、
+ret += ch   ## retをchだけ増加させる
+return ret   ## retが関数出力となる
+def euler013_front_n_slice(s, n):   ## 関数euler013_front_n_slice(s, n)は、以下の通り定義される
+ret = ""   ## retを""とする
+for i, ch in enumerate(s):   ## {{sに番号をつける}}を先頭から順にiとchとして、以下を繰り返す
+if i < n:   ## もしiがnより小さいとき、
+ret += ch   ## retをchだけ増加させる
+return ret   ## retが関数出力となる
+def euler013_query_n_sum(q, n):   ## 関数euler013_query_n_sum(q, n)は、以下の通り定義される
+s = 0   ## sを0とする
+for i in range(n):   ## {{0からn未満までの数列}}を先頭から順にiとして、以下を繰り返す
+s += q[i]   ## sをqのi番目だけ増加させる
+return s   ## sが関数出力となる

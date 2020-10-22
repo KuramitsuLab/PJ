@@ -1,0 +1,53 @@
+def euler005():   ## 関数euler005()は、以下の通り定義される
+prime = []   ## primeを空のリストとする
+for i in range(2, 20):   ## {{2から20未満までの数列}}を先頭から順にiとして、以下を繰り返す
+l = []   ## lを空のリストとする
+for y in prime:   ## primeを先頭から順にyとして、以下を繰り返す
+if i % y == 0:   ## もし{{iをyで割った余り}}が0と等しいとき、
+l.append(y)   ## lにyを追加する
+if len(l) == 0:   ## もしlの長さが0と等しいとき、
+prime.append(i)   ## primeにiを追加する
+a = 1   ## aを1とする
+for p in prime:   ## primeを先頭から順にpとして、以下を繰り返す
+for i in range(int(20**(1/p))):   ## {{0から{{20を{{1をpで割った値}}乗した値}}の整数値未満までの数列}}を先頭から順にiとして、以下を繰り返す
+a = a * p   ## aを{{aにpを掛けた値}}とする
+return a   ## aが関数出力となる
+def euler005_enum_prime(n):   ## 関数euler005_enum_prime(n)は、以下の通り定義される
+prime = []   ## primeを空のリストとする
+for i in range(2, n + 1):   ## {{2から{{nに1を加えた値}}未満までの数列}}を先頭から順にiとして、以下を繰り返す
+f = True   ## fを真とする
+for j in prime:   ## primeを先頭から順にjとして、以下を繰り返す
+if i % j == 0:   ## もし{{iをjで割った余り}}が0と等しいとき、以下のとおり
+f = False   ## fを偽とする
+break   ## この繰り返しを中断する
+if f:   ## もしfのとき、
+prime.append(i)   ## primeにiを追加する
+return prime   ## primeが関数出力となる
+def euler005_enum_prime_a(n):   ## 関数euler005_enum_prime_a(n)は、以下の通り定義される
+primes = []   ## primesを空のリストとする
+for i in range(2, n + 1):   ## {{2から{{nに1を加えた値}}未満までの数列}}を先頭から順にiとして、以下を繰り返す
+if i == 2:   ## もしiが2と等しいとき、
+primes.append(i)   ## primesにiを追加する
+もしそうでなければ、
+for j in range(2, int(i**0.5) + 1):   ## 2から{{{{iを0.5乗した値}}の整数値に1を加えた値}}未満までの数列を先頭から順にjとして、以下を繰り返す
+if i % j == 0:   ## もし{{iをjで割った余り}}が0と等しいとき、
+break   ## この繰り返しを中断する
+return primes   ## primesが関数出力となる
+def euler005_enum_prime_b(n):   ## 関数euler005_enum_prime_b(n)は、以下の通り定義される
+primes = [True] * (n + 1)   ## primesを真のリストの{{nに1を加えた値}}倍とする
+ret = []   ## retを空のリストとする
+for i in range(2, int(n**0.5) + 1):   ## 2から{{{{nを0.5乗した値}}の整数値に1を加えた値}}未満までの数列を先頭から順にiとして、以下を繰り返す
+if primes[i]:   ## もしprimesのi番目のとき、
+for j in range(i + i, n + 1, i):   ## {{{{iにiを加えた値}}から{{nに1を加えた値}}未満までのi間隔の数列}}を先頭から順にjとして、以下を繰り返す
+primes[j] = False   ## primesのj番目を偽とする
+for i in range(2, n + 1):   ## {{2から{{nに1を加えた値}}未満までの数列}}を先頭から順にiとして、以下を繰り返す
+if primes[i]:   ## もしprimesのi番目のとき、
+ret.append(i)   ## retにiを追加する
+return ret   ## retが関数出力となる
+def euler005_expmax(p, n):   ## 関数euler005_expmax(p, n)は、以下の通り定義される
+a = 1   ## aを1とする
+while a < n:   ## もしaがnより小さいとき、以下を繰り返す
+a *= p   ## aをp倍にする
+return int(a / p)   ## {{aをpで割った値}}の整数値が関数出力となる
+def euler005_expmax_a(p, n):   ## 関数euler005_expmax_a(p, n)は、以下の通り定義される
+return p**int(n**(1/p))   ## {{pを{{nを{{1をpで割った値}}乗した値}}の整数値乗した値}}が関数出力となる

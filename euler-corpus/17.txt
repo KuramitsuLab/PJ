@@ -1,0 +1,47 @@
+def euler017():   ## 関数euler017()は、以下の通り定義される
+ret = 0   ## retを0とする
+for n in range(1, 1001):   ## {{1から1001未満までの数列}}を先頭から順にnとして、以下を繰り返す
+if n <= 20:   ## もしnが20以下のとき、
+ret += len(word[n])   ## retをwordのn番目の長さだけ増加させる
+elif len(str(n)) == 2:   ## もしそうでなく、nの文字列の長さが2と等しいとき、以下のとおり
+ret += len(twoword[int(n / 10)])   ## retをtwowordの{{nを10で割った値}}の整数値番目の長さだけ増加させる
+ret += len(word[n % 10])   ## retをwordの{{nを10で割った余り}}番目の長さだけ増加させる
+elif len(str(n)) == 3:   ## もしそうでなく、nの文字列の長さが3と等しいとき、以下のとおり
+ret += len(word[int(n / 100)])   ## retをwordの{{nを100で割った値}}の整数値番目の長さだけ増加させる
+ret += len("hundredand")   ## retを"hundredand"の長さだけ増加させる
+a = n % 100   ## aを{{nを100で割った余り}}とする
+if a != 0 and a <= 20:   ## もし{{aが0と等しくないか}}、かつ{{aが20以下}}のとき、
+ret += len(word[a])   ## retをwordのa番目の長さだけ増加させる
+elif a == 0:   ## もしそうでなく、aが0と等しいとき、
+ret -= 3   ## retを3だけ減少させる
+もしそうでなければ、
+ret += len(twoword[int(a / 10)])   ## retをtwowordの{{aを10で割った値}}の整数値番目の長さだけ増加させる
+ret += len(word[a % 10])   ## retをwordの{{aを10で割った余り}}番目の長さだけ増加させる
+もしそうでなければ、
+ret += len("onethousand")   ## retを"onethousand"の長さだけ増加させる
+return ret   ## retが関数出力となる
+def euler017_digit_separate(n):   ## 関数euler017_digit_separate(n)は、以下の通り定義される
+q = str(n)   ## qをnの文字列とする
+ret = []   ## retを空のリストとする
+for ch in q:   ## qを先頭から順にchとして、以下を繰り返す
+ret.append(int(ch))   ## retにchの整数値を追加する
+return ret   ## retが関数出力となる
+def euler017_digit_count(n):   ## 関数euler017_digit_count(n)は、以下の通り定義される
+c = 1   ## cを1とする
+while int(n / 10) > 0:   ## もし{{nを10で割った値}}の整数値が0より大きいとき、以下を繰り返す
+n /= 10   ## nを10分の一にする
+c += 1   ## cを1だけ増加させる
+return c   ## cが関数出力となる
+def euler017_ones_to_string(n):   ## 関数euler017_ones_to_string(n)は、以下の通り定義される
+return word[n % 10]   ## wordの{{nを10で割った余り}}番目が関数出力となる
+def euler017_is_equal(a, b):   ## 関数euler017_is_equal(a, b)は、以下の通り定義される
+return a == b   ## {{aがbと等しいか}}が関数出力となる
+def euler017_divid_integer_part(a, b):   ## 関数euler017_divid_integer_part(a, b)は、以下の通り定義される
+return int(a / b)   ## {{aをbで割った値}}の整数値が関数出力となる
+def euler017_string_length(s):   ## 関数euler017_string_length(s)は、以下の通り定義される
+c = 0   ## cを0とする
+for ch in s:   ## sを先頭から順にchとして、以下を繰り返す
+c += 1   ## cを1だけ増加させる
+return c   ## cが関数出力となる
+def euler017_string_length_a(s):   ## 関数euler017_string_length_a(s)は、以下の通り定義される
+return len(s)   ## sの長さが関数出力となる

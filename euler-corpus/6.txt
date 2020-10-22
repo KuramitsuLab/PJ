@@ -1,0 +1,31 @@
+def euler006():   ## 関数euler006()は、以下の通り定義される
+sumofsq = 0   ## sumofsqを0とする
+for i in range(100):   ## {{0から100未満までの数列}}を先頭から順にiとして、以下を繰り返す
+sumofsq += (i + 1) * (i + 1)   ## sumofsqを{{{{iに1を加えた値}}に{{iに1を加えた値}}を掛けた値}}だけ増加させる
+sqofsum = 101 * 50   ## sqofsumを{{101に50を掛けた値}}とする
+return sumofsq - sqofsum   ## {{sumofsqからsqofsumを引いた値}}が関数出力となる
+def euler006_make_common_diff_sequence(s, d, n):   ## 関数euler006_make_common_diff_sequence(s, d, n)は、以下の通り定義される
+ret = [s]   ## retをsのリストとする
+for i in range(n - 1):   ## {{0から{{nから1を引いた値}}未満までの数列}}を先頭から順にiとして、以下を繰り返す
+ret.append(ret[-1] + d)   ## retに{{retの-1番目にdを加えた値}}を追加する
+return ret   ## retが関数出力となる
+def euler006_make_common_diff_sequence_a(s, d, n):   ## 関数euler006_make_common_diff_sequence_a(s, d, n)は、以下の通り定義される
+ret = []   ## retを空のリストとする
+for i in range(s, s + (d * n), d):   ## {{sから{{sに{{dにnを掛けた値}}を加えた値}}未満までのd間隔の数列}}を先頭から順にiとして、以下を繰り返す
+ret.append(i)   ## retにiを追加する
+return ret   ## retが関数出力となる
+def euler006_n_square(n):   ## 関数euler006_n_square(n)は、以下の通り定義される
+return n * n   ## {{nにnを掛けた値}}が関数出力となる
+def euler006_n_square_a(n):   ## 関数euler006_n_square_a(n)は、以下の通り定義される
+ret = 0   ## retを0とする
+for i in range(n):   ## {{0からn未満までの数列}}を先頭から順にiとして、以下を繰り返す
+ret += n   ## retをnだけ増加させる
+return ret   ## retが関数出力となる
+def euler006_sum_a_to_b(a, b):   ## 関数euler006_sum_a_to_b(a, b)は、以下の通り定義される
+s = 0   ## sを0とする
+while a < b:   ## もしaがbより小さいとき、以下を繰り返す
+s += a   ## sをaだけ増加させる
+a += 1   ## aを1だけ増加させる
+return s   ## sが関数出力となる
+def euler006_sum_a_to_b_a(a, b):   ## 関数euler006_sum_a_to_b_a(a, b)は、以下の通り定義される
+return sum(range(a, b))   ## {{aからb未満までの数列}}の総和が関数出力となる
