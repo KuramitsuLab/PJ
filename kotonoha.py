@@ -36,6 +36,7 @@ class Transpiler(object):
         self.buffers = []
 
     def push(self, s):
+        s = s.replace('かのとき', 'とき')
         self.buffers.append(s)
 
     def pushLF(self):
@@ -43,6 +44,7 @@ class Transpiler(object):
 
     def pushLine(self, tree):
         s = str(tree).split('\n')
+        s = s[0].split('#')        
         self.buffers.append(s[0]+'  ## ')
 
     def compile(self, source):
@@ -93,14 +95,20 @@ class Transpiler(object):
             trees = tree.getSubNodes()
             for c, t in enumerate(trees[:-1]):
                 self.pushLine(t)
-                if c > 0:
-                    self.push('そして、')
+                # if c > 0:
+                #     self.push('そして、')
                 self.visit(t)
                 self.pushLF()
             self.pushLine(trees[-1])
-            self.push('最後に、')
+            # self.push('最後に、')
             self.visit(trees[-1])
 
+
+    def acceptTrueExpr(self, tree):
+        self.push('真')
+
+    def acceptFalseExpr(self, tree):
+        self.push('偽')
 
     def acceptInt(self, tree):
         self.push(str(tree))
@@ -126,7 +134,10 @@ class Transpiler(object):
 
     # [#Tuple 'a']
     def acceptTuple(self, tree):
-        self.push(self.tuplefy(tree)+'の組')
+        if len(tree) == 1:
+            self.visit(tree[0])
+        else:
+            self.push(self.tuplefy(tree)+'の組')
 
     def tuplefy(self, tree, max=2):
         xs = [self.stringfy(t) for t in tree]
@@ -139,8 +150,8 @@ class Transpiler(object):
         if len(tree) == 0:
             self.push('空のリスト')
         else:
-            ','.join([self.stringfy(t) for t in tree.getSubNodes()])
-            self.push('のリスト')
+            v = self.tuplefy(tree)
+            self.push(f'{v}のリスト')
 
     # [#Data 'a']
     def acceptData(self, tree):
@@ -227,6 +238,10 @@ class Transpiler(object):
         p = [self.stringfy(tree.left), self.stringfy(tree.right)]
         self.pushFuncApp(name, p, get_corpus(name))
 
+    def acceptMul(self, tree):
+        p = [self.stringfy(tree[0]), self.stringfy(tree[1])]
+        self.push(f'{p[0]}の{p[1]}倍')
+
     def acceptAnd(self, tree):
         p = [self.stringfy(tree.left), self.stringfy(tree.right)]
         self.push(f'{p[0]}、かつ{p[1]}')
@@ -236,8 +251,14 @@ class Transpiler(object):
         self.push(f'{p[0]}、または{p[1]}')
 
     def acceptNot(self, tree):
-        p = [self.stringfy(tree.expr)]
+        p = [self.stringfy(tree[0])]
         self.push(f'{p[0]}の反対')
+
+    def acceptIfExpr(self, tree):
+        cond = self.stringfy(tree.cond)
+        then0 = self.stringfy(tree.get('then'))
+        else0 = self.stringfy(tree.get('else'))
+        self.push(f'もし{cond}のとき{then0}、そうでなければ{else0}')
 
 
     def acceptExpression(self, tree):
@@ -275,6 +296,12 @@ class Transpiler(object):
         p = [self.stringfy(tree.left), self.stringfy(tree.right)]
         self.pushFuncApp(name, p, get_corpus(name))
 
+    # a += 1
+    def acceptAssignment(self, tree):
+        left = self.stringfy(tree.left)
+        right = self.stringfy(tree.right)
+        self.pushLet(left, right)
+
     # if a > 0: pass
     def acceptPass(self, tree):
         self.push(f'何もしない')
@@ -292,8 +319,8 @@ class Transpiler(object):
                 self.push(f'以下のとおり')
                 self.pushLF()
                 self.visit(body)
-                self.pushLF()
-                self.push('以上')
+                # self.pushLF()
+                # self.push('以上')
         else:
             self.visit(body[0])
         if tree.has('elif'):
@@ -313,8 +340,8 @@ class Transpiler(object):
                     self.push(f'以下のとおり')
                     self.pushLF()
                     self.visit(body)
-                    self.pushLF()
-                    self.push('以上')
+                    # self.pushLF()
+                    # self.push('以上')
             else:
                 self.visit(body[0])
 
@@ -330,8 +357,8 @@ class Transpiler(object):
                 self.push(f'以下のとおり')
                 self.pushLF()
                 self.visit(body)
-                self.pushLF()
-                self.push('以上')
+                # self.pushLF()
+                # self.push('以上')
         else:
             self.visit(body[0])
 
