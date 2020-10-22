@@ -1,0 +1,722 @@
+def euler003(): pass
+n = 600851475143
+i = 2
+while i * i < n: pass
+while n % i == 0: pass
+n = n / i
+i = i + 1
+return int(n)
+def euler003_n_morethan_square(a, n): pass
+return a * a < n
+def euler003_n_divide_a(n, a): pass
+while n % a == 0: pass
+n /= a
+return int(n)
+def euler017(): pass
+ret = 0
+for n in range(1, 1001): pass
+if n <= 20: pass
+ret += len(word[n])
+elif len(str(n)) == 2: pass
+ret += len(twoword[int(n / 10)])
+ret += len(word[n % 10])
+elif len(str(n)) == 3: pass
+ret += len(word[int(n / 100)])
+ret += len("hundredand")
+a = n % 100
+if a != 0 and a <= 20: pass
+ret += len(word[a])
+elif a == 0: pass
+ret -= 3
+else: pass
+ret += len(twoword[int(a / 10)])
+ret += len(word[a % 10])
+else: pass
+ret += len("onethousand")
+return ret
+def euler017_digit_separate(n): pass
+q = str(n)
+ret = []
+for ch in q: pass
+ret.append(int(ch))
+return ret
+def euler017_digit_count(n): pass
+c = 1
+while int(n / 10) > 0: pass
+n /= 10
+c += 1
+return c
+def euler017_ones_to_string(n): pass
+return word[n % 10]
+def euler017_is_equal(a, b): pass
+return a == b
+def euler017_divid_integer_part(a, b): pass
+return int(a / b)
+def euler017_string_length(s): pass
+c = 0
+for ch in s: pass
+c += 1
+return c
+def euler017_string_length_a(s): pass
+return len(s)
+def euler016(): pass
+q = str(2**1000)
+s = 0
+for x in q: pass
+s += int(x)
+return s
+def euler016_all_digit_sum(n): pass
+q = str(n)
+s = 0
+for ch in q: pass
+s += int(ch)
+return s
+def euler016_n_separate_digit(n): pass
+ret = [n % 10]
+while int(n / 10) > 0: pass
+n = int(n / 10)
+ret.insert(0, n % 10)
+return ret
+def euler016_a_exp_b(a, b): pass
+res = 1
+c = 0
+while c < b: pass
+res *= a
+c += 1
+return res
+def euler016_a_exp_b_a(a, b): pass
+return a**b
+
+fib = [1, 2]
+while fib[-1] < 4000000: pass
+fib.append(fib[-1] + fib[-2])
+s = 0
+for x in fib: pass
+if x % 2 == 0: pass
+s += x
+return s
+def euler002_divide_2(n): pass
+return n % 2 == 0
+def euler002_add_param(a, b): pass
+return a + b
+def euler002_sum_list(l): pass
+s = 0
+for x in l: pass
+s += x
+return s
+def euler002_sum_list_a(l): pass
+return sum(l)
+def euler002_n_fibnocci_sequence(n): pass
+fibs = [0, 1]
+a = n - 2
+if n == 1: pass
+return [0]
+else: pass
+while a > 0: pass
+fibs.append(fibs[-1] + fibs[-2])
+a -= 1
+return fibs
+def euler002_n_fibnocci_number(n): pass
+fibs = [0, 1]
+if 0 < n <= 2: pass
+return fibs[n - 1]
+else: pass
+a = n - 2 
+while a > 0: pass
+fibs.append(fibs[-1] + fibs[-2])
+a -= 1
+return fibs[-1]
+def euler014(): pass
+N = 10**6
+cl = [-1] * N
+cl[1] = 0
+for n in range(2, N): pass
+b = []
+while n >= N or cl[n] == -1: pass
+b.append(n)
+n = int(n / 2) if n % 2 == 0 else n * 3 + 1
+l = cl[n]
+for m in reversed(b): pass
+l += 1
+if m < N: pass
+cl[m] = l
+m = 0
+ret = 0
+for i, n in enumerate(cl): pass
+if m < n: pass
+m = n
+ret = i
+return ret
+def euler014_collatz_calc(n): pass
+return int(n / 2) if n % 2 == 0 else n * 3 + 1
+def euler014_collatz_problem_count(n): pass
+c = 0
+while n != 1: pass
+n = int(n / 2) if n % 2 == 0 else n * 3 + 1
+c += 1
+return c
+def euler014_list_init(l, n): pass
+ret = []
+for i in range(l): pass
+ret.append(n)
+return ret
+def euler014_list_enum(l): pass
+ret = []
+for i in range(len(l)): pass
+ret.append((i, l[i]))
+return ret
+def euler014_list_reverse(l): pass
+ret = []
+for i in reversed(l): pass
+ret.append(i)
+return ret
+def euler014_make_range_list(s, e): pass
+ret = []
+for i in range(s, e): pass
+ret.append(i)
+return ret
+
+facts = [1] * 21
+for i in range(20): pass
+facts[i + 1] = facts[i] * (i + 1)
+dinomials = [0] * 21
+for i in range(21): pass
+dinomials[i] = int(facts[20] / (facts[i] * facts[20 - i]))
+for i in range(20): pass
+for j in range(20): pass
+dinomials[j] += dinomials[j + 1]
+return dinomials[0]
+def euler015_combination(n, r): pass
+facts = [1] * (n + 1)
+for x in range(n): pass
+facts[x + 1] = facts[x] * (x + 1)
+return int(facts[n] / (facts[r] * facts[n - r]))
+def euler015_all_factorials(n): pass
+facts = [1] * (n + 1)
+for x in range(n): pass
+facts[x + 1] = facts[x] * (x + 1)
+return facts
+def euler015_pascal_triangle(n): pass
+if n == 1: pass
+return [1]
+else: pass
+l = euler015_pascal_triangle(n - 1)
+ret = [l[0], l[-1]]
+for i in range(n - 2): pass
+ret.insert(i + 1, l[i] + l[i + 1])
+return ret
+def euler011(): pass
+grid = """""".split()
+q = []
+for ch in grid: pass
+q.append(int(ch))
+m = 0
+for i in range(20): pass
+for j in range(20): pass
+if j <= 16: pass
+m = max(m, q[i*20+j] * q[i*20+j+1] * q[i*20+j+2] * q[i*20+j+3])
+if i <= 16: pass
+m = max(m, q[i*20+j] * q[(i+1)*20+j+1] * q[(i+2)*20+j+2] * q[(i+3)*20+j+3])
+if 4 <= j and i <= 16: pass
+m = max(m, q[i*20+j] * q[(i+1)*20+j-1] * q[(i+2)*20+j-2] * q[(i+3)*20+j-3])
+if i <= 16: pass
+m = max(m, q[i*20+j] * q[(i+1)*20+j] * q[(i+2)*20+j] * q[(i+3)*20+j])
+return m
+def euler011_less_or_equal(a, b): pass
+return a <= b
+def euler011_less_or_equal_a(a, b): pass
+res = b - a
+return res >= 0
+def euler011_over_or_equal(a, b): pass
+return b <= a
+def euler011_over_or_equal_a(a, b): pass
+res = b - a
+return res <= 0
+def euler011_string_space_split(s): pass
+sl = []
+buf = ""
+for ch in s: pass
+if ch == " ": pass
+sl.append(buf)
+buf = ""
+else: pass
+buf += ch
+sl.append(buf)
+return sl
+def euler011_zero_to_n_list(n): pass
+ret = []
+a = 0
+while a < n: pass
+ret.append(a)
+a += 1
+return ret
+def euler011_zero_to_n_list_a(n): pass
+return list(range(n))
+def euler011_upward_point(x, y): pass
+return (x, y - 1)
+def euler011_downward_point(x, y): pass
+return (x, y + 1)
+def euler011_left_point(x, y): pass
+return (x - 1, y)
+def euler011_right_point(x, y): pass
+return (x + 1, y)
+def euler011_upper_left_point(x, y): pass
+return (x - 1, y - 1)
+def euler011_upper_right_point(x, y): pass
+return (x + 1, y - 1)
+def euler011_lower_left_point(x, y): pass
+return (x - 1, y + 1)
+def euler011_lower_right_point(x, y): pass
+return (x + 1, y + 1)
+
+prime = []
+for i in range(2, 20): pass
+l = []
+for y in prime: pass
+if i % y == 0: pass
+l.append(y)
+if len(l) == 0: pass
+prime.append(i)
+a = 1
+for p in prime: pass
+for i in range(int(20**(1/p))): pass
+a = a * p
+return a
+def euler005_enum_prime(n): pass
+prime = []
+for i in range(2, n + 1): pass
+f = True
+for j in prime: pass
+if i % j == 0: pass
+f = False
+break
+if f: pass
+prime.append(i)
+return prime
+def euler005_enum_prime_a(n): pass
+primes = []
+for i in range(2, n + 1): pass
+if i == 2: pass
+primes.append(i)
+else: pass
+for j in range(2, int(i**0.5) + 1): pass
+if i % j == 0: pass
+break
+else: pass
+primes.append(i)
+return primes
+def euler005_enum_prime_b(n): pass
+primes = [True] * (n + 1)
+ret = []
+for i in range(2, int(n**0.5) + 1): pass
+if primes[i]: pass
+for j in range(i + i, n + 1, i): pass
+primes[j] = False
+for i in range(2, n + 1): pass
+if primes[i]: pass
+ret.append(i)
+return ret
+def euler005_expmax(p, n): pass
+a = 1
+while a < n: pass
+a *= p
+return int(a / p)
+def euler005_expmax_a(p, n): pass
+return p**int(n**(1/p))
+def euler004(): pass
+ans = 0
+for j in range(999, 99, -1): pass
+for i in range(999, 99, -1): pass
+s = (str)(j * i)
+a = ""
+b = ""
+sep = (int)(len(s) / 2) + (len(s) % 2)
+for k in range(sep): pass
+a += s[k]
+b += s[len(s) - k - 1]
+if a == b: pass
+ans = max(ans, i * j)
+return ans
+def euler004_n_slice(s, n): pass
+ret = ""
+for i in range(n): pass
+ret += s[i]
+return ret
+def euler004_n_bslice(s, n): pass
+ret = ""
+for i in range(n): pass
+ret += s[len(s) - 1 - i]
+return ret
+def euler004_is_equal(a, b): pass
+return a == b
+def euler004_half_digit(n): pass
+s = (str)(n)
+a = len(s)
+return (int)(a / 2) + (a % 2)
+def euler004_multiple(a, b): pass
+return a * b
+def euler004_multiple_a(a, b): pass
+res = 0
+for i in range(b): pass
+res += a
+return res
+def euler004_string_reverse(s): pass
+ret = ""
+for ch in reversed(s): pass
+ret += ch
+return ret
+def euler004_is_palindromic(s): pass
+rs = ""
+for ch in reversed(s): pass
+rs += ch
+return s == rs
+def euler010(): pass
+p = [True] * 2000000
+for x in range(2, int(2000000**0.5) + 1): pass
+if p[x]: pass
+for i in range(2 * x, len(p), x): pass
+p[i] = False
+ret = []
+for i in range(2, 2000000): pass
+if p[i]: pass
+ret.append(i)
+return sum(ret)
+def euler010_enum_prime(n): pass
+p = [True] * n
+for x in range(2, int(n**0.5) + 1): pass
+if p[x]: pass
+for i in range(2 * x, len(p), x): pass
+p[i] = False
+ret = []
+for i in range(2, n): pass
+if p[i]: pass
+ret.append(i)
+return ret
+def euler010_n_is_prime(n): pass
+judge = True
+if n < 2: pass
+return False
+elif n == 2: pass
+return True
+for i in range(2, int(n**0.5) + 1): pass
+if judge and n % i == 0: pass
+judge = False
+return judge
+def euler010_list_sum(l): pass
+s = 0
+for x in l: pass
+s += x
+return s
+def euler010_list_sum_a(l): pass
+return sum(l)
+def euler010_n_multiple_list(s, e, d): pass
+ret = []
+while s < e: pass
+ret.append(s)
+s += d
+return ret
+
+sumofsq = 0
+for i in range(100): pass
+sumofsq += (i + 1) * (i + 1)
+sqofsum = 101 * 50
+return sumofsq - sqofsum
+def euler006_make_common_diff_sequence(s, d, n): pass
+ret = [s]
+for i in range(n - 1): pass
+ret.append(ret[-1] + d)
+return ret
+def euler006_make_common_diff_sequence_a(s, d, n): pass
+ret = []
+for i in range(s, s + (d * n), d): pass
+ret.append(i)
+return ret
+def euler006_n_square(n): pass
+return n * n
+def euler006_n_square_a(n): pass
+ret = 0
+for i in range(n): pass
+ret += n
+return ret
+def euler006_sum_a_to_b(a, b): pass
+s = 0
+while a < b: pass
+s += a
+a += 1
+return s
+def euler006_sum_a_to_b_a(a, b): pass
+return sum(range(a, b))
+def euler012(): pass
+s = 1
+c = 0
+pl = [2]
+fl = [1] * 4 + [0] * 96
+while c < 500: pass
+tn = sum(range(1, s + 1))
+if not s % 2: pass
+t = (int(s / 2), s + 1)
+else: pass
+t = (s, int((s + 1) / 2))
+fc = 1
+for x in t: pass
+if len(fl) < x: pass
+l = [0] * (x - len(fl) + 1)
+fl += l
+if not fl[x]: pass
+nc = 1
+for i in range(pl[-1], x + 1): pass
+for j in range(2, int(x**0.5) + 1): pass
+if i % j == 0: pass
+break
+else: pass
+if not i in pl: pass
+pl.append(i)
+for i in pl: pass
+if i > int(tn / 2): pass
+break
+if x % i == 0: pass
+j = 1
+a = tn
+while a % i == 0: pass
+a /= i
+j += 1
+else: pass
+nc *= j
+fl[x] = nc
+fc *= fl[x]
+s += 1
+c = fc
+return tn
+def euler012_a_over_b(a, b): pass
+return b < a
+def euler012_range_prime_enumerate(s, e): pass
+pl = []
+if s <= 1: pass
+s = 2
+for i in range(s, e + 1): pass
+f = True
+for j in range(2, int(i**0.5) + 1): pass
+if i % j == 0: pass
+break
+else: pass
+pl.append(i)
+return pl
+def euler012_is_coprime(a, b): pass
+while b != 0: pass
+a, b = b, a % b
+return a == 1
+def euler012_count_division(n, a): pass
+ret = 0
+while n % a == 0: pass
+n /= a
+ret += 1
+return ret
+def euler012_prime_factorize(n): pass
+primes = [True] * (n + 1)
+p = []
+for i in range(2, int(n**0.5) + 1): pass
+if primes[i]: pass
+for j in range(i + i, n + 1, i): pass
+primes[j] = False
+for i in range(2, n + 1): pass
+if primes[i]: pass
+p.append(i)
+fl = []
+for x in p: pass
+if n % x == 0: pass
+a = n
+c = 0
+while a % x == 0: pass
+a /= x
+c += 1
+else: pass
+fl.append((x, c))
+return fl
+def euler012_nth_triangular_number(n): pass
+return sum(range(1, n + 1))
+def euler012_next_triangular_number(tn): pass
+ret = 0
+c = 1
+while ret <= tn: pass
+ret += c
+c += 1
+return ret
+def euler012_count_divisor(expl): pass
+ret = 1
+for x in expl: pass
+ret *= (x + 1)
+return ret
+def euler012_is_list_empty(l): pass
+return not l
+def euler012_is_list_empty_a(l): pass
+return len(l) == 0
+
+q = []
+a = str(sum(q))
+ret = ""
+for i, ch in enumerate(a): pass
+if i < 10: pass
+ret += ch
+return ret
+def euler013_front_n_slice(s, n): pass
+ret = ""
+for i, ch in enumerate(s): pass
+if i < n: pass
+ret += ch
+return ret
+def euler013_query_n_sum(q, n): pass
+s = 0
+for i in range(n): pass
+s += q[i]
+return s
+
+count = 0
+p = 1
+pl = []
+while count < 10001: pass
+p += 1
+l = [ i for i in range(2, int(math.sqrt(p)) + 1) if p % i == 0 ]
+if len(l) == 0: pass
+count += 1
+return p
+def euler007_n_division(a, n): pass
+return a % n == 0
+def euler007_n_division_a(a, n): pass
+while a > 0: pass
+a -= n
+return a == 0
+def euler007_is_prime(a): pass
+dl = []
+for i in range(2, a): pass
+if a % i == 0: pass
+dl.append(i)
+return len(dl) == 0
+def euler007_is_prime_a(a): pass
+if a < 2: pass
+return False
+elif a == 2: pass
+return True
+else: pass
+for i in range(2, int(a**0.5) + 1): pass
+if a % i == 0: pass
+return False
+return True
+def euler007_succ(a): pass
+return a + 1
+def euler007_is_less(a, b): pass
+return a < b
+def euler007_is_equale_zero(a): pass
+return a == 0
+def euler009(): pass
+for i in range(1, 1000): pass
+for j in range(i, 1000): pass
+for k in range(j, 1000): pass
+p = i * i + j * j
+if p == k * k and i + j + k == 1000: pass
+return i * j * k
+def euler009_is_pythagoras(a, b, c): pass
+return a * a + b * b == c * c
+def euler009_n_square(n): pass
+return n * n
+def euler009_n_square_a(n): pass
+ret = 0
+for i in range(n): pass
+ret += n
+return ret
+def euler009_is_sum_equation1000(tp): pass
+s = 0
+for x in tp: pass
+s += x
+return s == 1000
+def euler009_is_sum_equation1000_a(tp): pass
+return sum(tp) == 1000
+def euler009_all_product(l): pass
+ret = 1
+for a in l: pass
+ret *= a
+return ret
+
+sl = []
+for i in range(5): pass
+sl.append(int(s[i]))
+m = 1
+for i in sl: pass
+m *= i
+for i in range(5, len(s)): pass
+sl.append(int(s[i]))
+sl.pop(0)
+a = 1
+for j in sl: pass
+a *= j
+m = max(m, a)
+return m
+def euler008_all_product(l): pass
+ret = 1
+for x in l: pass
+ret *= x
+return ret
+def euler008_list_slice(l, s, c): pass
+ret = []
+for i in range(c): pass
+ret.append(l[s + i])
+return ret
+def euler008_elem_max(a, b): pass
+return b if a < b else a
+def euler008_elem_max_a(a, b): pass
+return max(a, b)
+def euler008_list_add(l, a): pass
+tmp = [a]
+l += tmp
+return l
+def euler008_list_add_a(l, a): pass
+l.append(a)
+return l
+def euler020(): pass
+fact = 1
+for i in range(100): pass
+fact *= (i + 1)
+s = str(fact)
+q = []
+for ch in s: pass
+q.append(int(ch))
+return sum(q)
+def euler020_factorial(n): pass
+ret = 1
+for x in range(n): pass
+ret *= (x + 1)
+return ret
+def euler020_digit_sum(n): pass
+q = str(n)
+s = 0
+for x in q: pass
+s += int(x)
+return s
+
+for i in reversed(range(len(tri) - 1)): pass
+for j in range(len(tri[i])): pass
+tri[i][j] += max(tri[i + 1][j], tri[i + 1][j + 1])
+return tri[0][0]
+
+d = 365
+sd = 0
+for y in range(1901, 2001): pass
+for i, day in enumerate(days): pass
+if d % 7 == 6: pass
+sd += 1
+d += day 
+if (y % 400 == 0 or ((not y % 100 == 0) and y % 4 == 0)) and i == 1: pass
+d += 1
+return sd
+def euler019_is_leap_year(y): pass
+return y % 400 == 0 or ((not y % 100 == 0) and y % 4 == 0)
+def euler019_names_of_the_day(y, m, d): pass
+if m <= 2: pass
+m += 12
+y -= 1
+gamma = 0
+if 1582 <= y: pass
+gamma = -2 * int(y / 100) + int( int(y / 100) / 4 )
+else: pass
+gamma = -1 * int(y / 100) + 5
+h = (d + int(26 * (m + 1) / 10) + (y % 100) + int((y % 100) / 4) + gamma) % 7
+return name[h]
