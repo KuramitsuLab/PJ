@@ -1,0 +1,45 @@
+abs(x)
+all(iterable)
+any(iterable)
+ascii(object),Aの印字可能な文字列
+bin(x),Aの2 進文字列
+bool([x]),Aの真理値
+breakpoint(*args, **kws)
+class bytearray([source[, encoding[, errors]]])
+bytes([source[, encoding[, errors]]])
+callable(object)¶
+chr(i)
+complex([real[, imag]])¶
+delattr(object, name)¶
+dict(**kwarg)
+dir([object]),ローカルスコープにある名前のリスト
+dir,Aの属性リスト
+divmod(a, b),AとBの整数除法の商と剰余からなる対
+enumerate(iterable),序数化された対列¶
+enumerate:start=,Aから開始した¶
+eval,Aの評価値
+exec(object[, globals[, locals]])
+filter,BをAでフィルターした列
+float([x]),Aの浮動小数点数
+getattr(object, name[, default])
+hasattr(object, name),Aに属性Bが存在するかどうか
+hash(object),Aのハッシュ値
+hex(x),Aの16進文字列
+id(object),Aの識別値
+input([prompt])¶
+class int([x]),Aの整数
+class int(x, base=10),基数BとしたAの整数
+isinstance(object, classinfo),AはBのインスタンスかどうか
+issubclass(class, classinfo),AはBのサブクラスかどうか
+iter(object[, sentinel])
+len(s),Aの長さ
+list([iterable]),Aのリスト
+max,Aの最大値
+class memoryview(obj)
+min,Aの最小値
+oct(x),Aの8進文字列
+open(file, mode='r', buffering=-1, encoding=None, errors=None, newline=None, closefd=True, opener=None)¶
+ord(c),の文字コード
+
+
+
