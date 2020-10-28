@@ -16,7 +16,7 @@ class Tokenizer(object):
     def push(self, s):
         self.buffers.append(s)
 
-    def compile(self, source):
+    def parse(self, source):
         tree = self.parser(source)
         self.buffers = []
         self.visit(tree)
@@ -114,6 +114,12 @@ class Tokenizer(object):
         self.visit(tree.index)
         self.push(']')
 
+    # [#GetExpr 'o.a']
+    def acceptGetExpr(self, tree):
+        self.visit(tree.recv)
+        self.push('.')
+        self.push(str(tree.name))
+
     # [#Infix left: [#Int '1']name: [#Name '+']right: [#Int '1']]
     def acceptUnary(self, tree):
         name = str(tree.name)
@@ -184,9 +190,27 @@ class Tokenizer(object):
         self.push('=')
         self.visit(tree.right)
 
+    # with f as x:
+    def acceptWith(self, tree):
+        self.push('with')
+        self.visit(tree.expr)
+        self.push('as')
+        self.visit(tree.get('as'))
+        if tree.has('body'):
+            self.push(':')
+            self.visit(tree.body)
+
     # if a > 0: pass
     def acceptPass(self, tree):
         self.push('pass')
+
+    # assert a > 0
+    def acceptAssert(self, tree):
+        self.push('assert')
+        self.visit(tree.cond)
+        if tree.has('expr'):
+            self.push(':')
+            self.visit(tree.get('expr'))
 
     # if a > 0: pass
     def acceptIf(self, tree):
@@ -222,6 +246,32 @@ class Tokenizer(object):
         self.push(':')
         self.visit(tree.body)
 
+    def acceptTry(self, tree):
+        self.push('try')
+        self.visit(tree.body)
+        if tree.has('except'):
+            for t in tree.get('except'):
+                self.push('except')
+                if t.has('cond'):
+                    self.visit(t.cond)
+                if t.has('as'):
+                    self.push('as')
+                    self.visit(t.get('as'))
+                self.push(':')
+                self.visit(t.body)
+        if tree.has('finally'):
+            self.push('finally')
+            self.push(':')
+            self.visit(tree.get('finally'))
+
+    # raise NameError from a
+    def acceptRaise(self, tree):
+        self.push('raise')
+        self.visit(tree.expr)
+        if tree.has('from'):
+            self.push('from')
+            self.visit(tree.get('from'))
+
     def acceptListForExpr(self, tree):
         self.push('[')
         self.visit(tree.append)
@@ -252,18 +302,53 @@ class Tokenizer(object):
         self.push(':')
         self.visit(tree.body)
 
+    def acceptParamDecl(self, tree):
+        name = str(tree.name)
+        self.push(name)
+        if tree.has('type'):
+            self.push(':')
+            self.push(str(tree.type))
+        if tree.has('value'):
+            self.push('=')
+            self.visit(tree.value)
+
     # return
     def acceptReturn(self, tree):
         self.push('return')
         if tree.has('expr'):
             self.visit(tree.expr)
 
+    # class C: pass
+    def acceptClassDecl(self, tree):
+        self.push('class')
+        self.push(str(tree.name))
+        if tree.has('extends'):
+            self.pushTrees(tree.extends)
+        self.push(':')
+        self.visit(tree.body)
+
     def acceptImportDecl(self, tree):
         self.push('import')
         name = str(tree.name)
         self.push(name)
+        if tree.has('as'):
+            self.push(str(tree.get('alias')))
 
+    def acceptFromDecl(self, tree):
+        self.push('from')
+        self.push(str(tree.name))
+        self.pushTrees(tree.names, '', ',', '')
 
+    def acceptDocument(self, tree):
+        pass
+
+defaultPyTokenizer = None
+
+def pytokens(s):
+    global defaultPyTokenizer
+    if defaultPyTokenizer == None:
+        defaultPyTokenizer = Tokenizer()
+    return defaultPyTokenizer.parse(s)
 
 #tokenizer = Tokenizer()
 #print(transpiler.compile('a, b = c\nx,y = y,x'))
@@ -271,7 +356,6 @@ class Tokenizer(object):
 #print(transpiler.compile('print(i, fibo(1))'))
 
 if __name__ == '__main__':
-    tokenizer = Tokenizer()
     if len(sys.argv) > 1:
         with open(sys.argv[1]) as f:
-            print(tokenizer.compile(f.read()))
+            print(pytokens(f.read()))

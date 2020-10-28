@@ -39,6 +39,7 @@ Statement =
     / ForStatement
     / WhileStatement
     / ControlStatement
+    / AssertStatement
     / TryStatement
     / WithStatement 
     / AssignmentStatement
@@ -97,7 +98,7 @@ ClassDecl = {
     "class" 
     name: Name 
     ("(" extends: Names ")")? ":"
-    (Block / Statement)
+    body: (Block / Statement)
     #ClassDecl
 }
 
@@ -136,7 +137,7 @@ FuncParam = {
     name: Name 
     ( ":" type: Type)?
     ( "=" value: Expression)?
-    #Param
+    #ParamDecl
 }
 
 example Expression lambda: print(1)
@@ -163,6 +164,7 @@ ControlStatement =
     / ContinueStatement
     / PassStatement
     / YieldStatement
+    / RaiseStatement
 
 ReturnStatement = {
     "return"
@@ -170,10 +172,22 @@ ReturnStatement = {
     #Return
 } 
 
-YieldStatement = { "yield" #Yield } 
+YieldStatement = { 
+    "yield" 
+    (expr: (Expressions / Expression) )?
+    #Yield 
+} 
+
 PassStatement =  { "pass" #Pass }
 BreakStatement = { "break" #Break }
 ContinueStatement = { "continue" #Continue }
+
+RaiseStatement = {
+    "raise"
+    expr: Expression
+    ("from" from: Expression)?
+    #Raise
+} 
 
 /* if文 */
 
@@ -197,6 +211,13 @@ elif C :
 else :
     D
 '''
+
+AssertStatement = {
+    "assert" 
+    cond: Expression 
+    ("," expr: Expression)?
+    #Assert
+}
 
 IfStatement = {
     "if" 
@@ -256,7 +277,7 @@ TryStatement = {
     (except: ExceptStatements)?
     (else: ElseStatement)?
     (finally: FinallyStatement)?
-    #If
+    #Try
 }
 
 ExceptStatements = {
@@ -266,7 +287,7 @@ ExceptStatements = {
 ExceptStatement = {
     (@match(INDENT) / LF)
     "except" 
-    (cond: Name ("as" Name)?)? ":"
+    (cond: Name ("as" as: Name)?)? ":"
     body: (Block / SingleBlock)
     #Except
 }
@@ -283,6 +304,7 @@ WithStatement = {
     expr: Expression 
     "as"
     name: Name
+    ("," { Expression "as" Name #With } )*   // FIXME
     ":"
     body: (Block / SingleBlock)
     #With
@@ -291,6 +313,9 @@ WithStatement = {
 /* Assignment */
 
 AssignmentStatement =
+    / GlobalStatement
+    / NonLocalStatement
+    / DeleteStatement
     / MultiAssignment
     / VarDecl
     / Assignment
@@ -355,6 +380,21 @@ SelfAssignment = {
 SelfAssignOp = {
     ('<<' / '>>' / '**' / '//' / '-' / [+=*/%&|^＋＝＊／％＆｜＾×÷]) ('='/'＝')
 } _
+
+GlobalStatement = {
+    "global" Names
+    #Global
+} 
+
+NonLocalStatement = {
+    "nonlocal" Names
+    #NonLocal
+}
+
+DeleteStatement = {
+    "del" LeftHand
+    #Delete
+}
 
 /* Expression */
 
