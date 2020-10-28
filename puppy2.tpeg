@@ -1,5 +1,5 @@
 /**
- * Puppy Grammar
+ * Puppy Grammar (Simple Python)
  * Authors:
  *   Kimio Kuramitsu (https://github.com/kkuramitsu/)
  * Parser Generator
@@ -22,6 +22,7 @@ S            = [ \t\u200B\v\r　]
 _            = ( S / BLOCKCOMMENT / LINECOMMENT )*
 __           = ( S / '\n' / BLOCKCOMMENT / LINECOMMENT )*
 SPC          = ( S / BLOCKCOMMENT / LINECOMMENT )+
+SKIP         = ('\n' _ &'\n')*
 
 BLOCKCOMMENT = '/*' ( !'*/' . )* '*/'
 LINECOMMENT  = [#＃] ( !LF . )*
@@ -38,14 +39,16 @@ Statement =
     / ForStatement
     / WhileStatement
     / ControlStatement
-    / TryStatement 
+    / TryStatement
+    / WithStatement 
     / AssignmentStatement
     / { Expression #Expression }
+    / Documentation
 
 Block = {
     @scope(
         @symbol(INDENT) (Statement (";" Statement)* ";"? / _ &EOL)
-        (@match(INDENT) (Statement (";" Statement)* ";"? / _ &EOL) )*
+        (SKIP @match(INDENT) (Statement (";" Statement)* ";"? / _ &EOL) )*
     )
     #Block
 }
@@ -55,6 +58,12 @@ SingleBlock = {
     (";" Statement)* 
     ";"? _ &EOL
     #Block
+}
+
+Documentation = {
+    '#' { (!EOL .)* } 
+    ( @match(INDENT) '#' { (!EOL .)* } )*
+    #Document
 }
 
 /* import */
@@ -87,7 +96,7 @@ Wildcard = { '*' } _
 ClassDecl = {
     "class" 
     name: Name 
-    ("(" extends: Name ")")? ":"
+    ("(" extends: Names ")")? ":"
     (Block / Statement)
     #ClassDecl
 }
@@ -269,6 +278,16 @@ FinallyStatement = {
     #Finally
 }
 
+WithStatement = {
+    "with"
+    expr: Expression 
+    "as"
+    name: Name
+    ":"
+    body: (Block / SingleBlock)
+    #With
+}
+
 /* Assignment */
 
 AssignmentStatement =
@@ -276,6 +295,7 @@ AssignmentStatement =
     / VarDecl
     / Assignment
     / SelfAssignment
+    / VarTypeDecl
 
 example Statement a,b = b,a
 
@@ -303,14 +323,20 @@ example Statement A += 1
 
 VarDecl = {
     (anno: Decorator)?
-    (type: VarType)?
     left: Name
+    (':' _  type: Type)?
     "=" 
     right: Expression
     #VarDecl
 }
 
 VarType = { 'const'/'let'/'var' } !W _
+
+VarTypeDecl = {
+    name: Name
+    ':' _  type: Type
+    #VarTypeDecl
+}
 
 Assignment = {
     left: LeftHand
